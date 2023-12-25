@@ -1,0 +1,258 @@
+<fd-toolbar aria-label="With Toolbar" fdType="transparent" [clearBorder]="true">
+  <h4 fd-title>Building Details</h4>
+  <fd-toolbar-spacer></fd-toolbar-spacer>
+  <button fd-toolbar-item fd-button label="New Item" (click)="open(content)" fdType="transparent" glyph="add"></button>
+</fd-toolbar>
+
+<table fd-table>
+  <thead fd-table-header>
+    <tr fd-table-row>
+      <th fd-table-cell> ID</th>
+      <th fd-table-cell>Building ID</th>
+      <th fd-table-cell>Description</th>
+      <th fd-table-cell>Actions</th>
+    </tr>
+  </thead>
+  <tbody fd-table-body>
+    <tr *ngFor="let row of records" fd-table-row>
+      
+      <td fd-table-cell>{{ row.id }}</td>
+      <td fd-table-cell>{{ row.buildingId }}</td>
+      <td fd-table-cell>{{ row.buildingDescription }}</td>
+      <td>
+        <button class="btn btn-sm btn-info m-1" (click)="openDetails(contentDetails, row)">
+          <i class="fa fa-search"></i>Details</button>
+        <button class="btn btn-sm btn-warning m-1" (click)="openEdit(contentEdit, row)">
+          <i class="fa fa-edit"></i>Edit</button>
+        <button class="btn btn-sm btn-danger m-1" (click)="openDelete(contentDelete, row)">
+          <i class="fa fa-remove"></i>Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!-- Add New Modal -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">New Building </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <div class="form-group">
+        <label for="profitCode">ProfitCode:</label>
+        <div class="input-group" aria-placeholder="Select Profit Code">
+          <select id="profitCode" name="profitCode" type="number" aria-placeholder="Select Profit Code"
+            [(ngModel)]="selectedProfitCode" class="form-control">
+            <option value="" disabled selected>Select a Profit Code</option>
+            <option *ngFor="let code of profitCodes" [value]="code.id" type="number">{{ code.profitId
+              }}-{{code.profitDescr}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="projectCode">ProjectCode:</label>
+        <div class="input-group" aria-placeholder="Select Project Code">
+          <select id="projectCode" name="projectCode" type="number" aria-placeholder="Select Project Code"
+            [(ngModel)]="selectedProjectCode" class="form-control">
+            <option value="" disabled selected>Select a Project Code</option>
+            <option *ngFor="let code of projectCodes" [value]="code.id" type="number">{{ code.projectId
+              }}-{{code.projectDescription}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="buildingTypeCode">BuildingTypeCode:</label>
+        <div class="input-group" aria-placeholder="Select buildingTypeCode Code">
+          <select id="buildingTypeCode" name="buildingTypeCode" type="number" aria-placeholder="Select buildingTypeCode Code"
+            [(ngModel)]="selectedBuildingTypeCode" class="form-control">
+            <option value="" disabled selected>Select a buildingTypeCode Code</option>
+            <option *ngFor="let code of buildingTypeCodes" [value]="code.id" type="number">{{ code.buildingTypeId
+              }}-{{code.buildingTypeDescr}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="buildingId">Building ID:</label>
+        <div class="input-group">
+          <input id="buildingId" name="buildingId" type="text" required class="form-control" ngModel>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="buildingDescription">Description:</label>
+        <div class="input-group">
+          <input id="buildingDescription" name="buildingDescription" type="text" required class="form-control" ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="oldNumber">OldNumber:</label>
+        <div class="input-group">
+          <input id="oldNumber" name="oldNumber" type="text" class="form-control" ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="validFrom">Valid Date:</label>
+        <div class="input-group">
+          <input id="validFrom" name="validFrom" type="date" class="form-control" ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="numberOfFloors">NumberOfFloors:</label>
+        <div class="input-group">
+          <input id="numberOfFloors" name="numberOfFloors" type="number"  class="form-control" ngModel>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="profit">Profit:</label>
+        <div class="input-group">
+          <input id="profit" name="profit" type="text" class="form-control" ngModel>
+        </div>
+      </div>
+
+
+      <div class=" text-center m-3">
+        <button data-dismiss="modal" class="btn btn-info " [disabled]="!f.valid">Add Building</button>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+  </div>
+</ng-template>
+
+<!-- Details Modal -->
+<ng-template #contentDetails let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Building Details:</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="buildingCode">Code:</label>
+        <div class="input-group">
+          <input id="buildingCode" class="form-control">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="buildingId">Building ID:</label>
+        <div class="input-group">
+          <input id="buildingId" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="buildingDescription">Description:</label>
+        <div class="input-group">
+          <input id="buildingDescription" class="form-control">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="oldNumber">OldNumber:</label>
+        <div class="input-group">
+          <input id="oldNumber" class="form-control">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="validFrom">Valid Date:</label>
+        <div class="input-group">
+          <input id="validFrom" class="form-control">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="profit">Profit:</label>
+        <div class="input-group">
+          <input id="profit" class="form-control">
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+
+
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+  </div>
+</ng-template>
+
+<!-- Edit Modal -->
+<ng-template #contentEdit let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Edit Building</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editForm" novalidate>
+      <div class="form-group m-2">
+        <label for="buildingCode">BuildingCode:</label>
+        <div class="input-group">
+          <input formControlName="buildingCode" type="number" class="form-control">
+        </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="buildingId">Building ID:</label>
+        <div class="input-group">
+          <input formControlName="buildingId" type="text" class="form-control">
+        </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="buildingDescription">Description:</label>
+        <div class="input-group">
+          <input formControlName="buildingDescription" type="text" class="form-control">
+        </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="oldNumber">oldNumber:</label>
+        <div class="input-group">
+          <input formControlName="oldNumber" type="number" class="form-control">
+        </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="validFrom">Valid Date:</label>
+        <div class="input-group">
+          <input formControlName="validFrom" type="date" class="form-control">
+        </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="profit">Profit:</label>
+        <div class="input-group">
+          <input formControlName="profit" type="text" class="form-control">
+        </div>
+      </div>
+
+
+      <div class=" text-center m-3"> <button data-dismiss="modal" class="btn btn-info" (click)="onSave()">Save
+          Changes</button> </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+  </div>
+</ng-template>
+
+<!-- Delete Modal -->
+<ng-template #contentDelete let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Confirm Delete</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h2>Are you sure you want to delete this record.</h2>
+    <div class=" text-center m-3">
+      <button data-dismiss="modal" class="btn btn-danger" (click)="onDelete()">Yes, Delete!</button>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+  </div>
+</ng-template>

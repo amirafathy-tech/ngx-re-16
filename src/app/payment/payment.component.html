@@ -1,0 +1,99 @@
+<div class="m-auto">
+
+
+<fd-toolbar aria-label="With Toolbar"  fdType="transparent" [clearBorder]="true">
+    <h4 fd-title>Payment Details</h4>
+    <fd-toolbar-spacer></fd-toolbar-spacer>
+    <button
+        [disabled]="loading"
+        fd-toolbar-item
+        fd-button
+        label="New Item"
+        (click)="open(content)"
+        fdType="transparent"
+        glyph="add"
+    ></button>
+</fd-toolbar>
+
+    <table fd-table class="table  table-striped table-hover">
+        <thead fd-table-header>
+            <tr fd-table-row>
+                <th fd-table-cell>Name</th>
+                <th fd-table-cell>Type</th>
+                <th fd-table-cell>Region Harvested</th>
+            </tr>
+        </thead>
+        <tbody fd-table-body>
+            <tr *ngFor="let row of displayedRows" fd-table-row>
+                <td fd-table-cell>{{ row.column1 }}</td>
+                <td fd-table-cell>{{ row.column2 }}</td>
+                <td fd-table-cell>{{ row.region }}</td>
+                <td fd-table-cell>
+               
+                    <button class="btn btn-sm btn-info m-1" (click)="openDetails(contentDetails, project)">
+                        <i class="fa fa-search"></i>Details</button>
+                    <button class="btn btn-sm btn-warning m-1" (click)="openEdit(contentEdit, project)">
+                        <i class="fa fa-edit"></i>Edit</button>
+                    <button class="btn btn-sm btn-danger m-1" (click)="openDelete(contentDelete, project)">
+                        <i class="fa fa-remove"></i>Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+  </div>    
+
+
+<!-- Add New Modal -->
+<ng-template #content let-modal> 
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">New Project </h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+        <div class="form-group">
+          <label for="projectCode">Code:</label>
+          <div class="input-group">
+            <input id="projectCode" name="projectCode" type="number" required class="form-control" ngModel>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="projectId">Project ID:</label>
+          <div class="input-group">
+            <input id="projectId" name="projectId" type="text" required class="form-control" ngModel>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="projectDescription">Description:</label>
+          <div class="input-group">
+            <input id="projectDescription" name="projectDescription" type="text" required class="form-control" ngModel>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="validFrom">Valid Date:</label>
+          <div class="input-group">
+            <input id="validFrom" name="validFrom" type="datetime-local" class="form-control" ngModel>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="profit">Profit:</label>
+          <div class="input-group">
+            <input id="profit" name="profit" type="text" class="form-control" ngModel>
+          </div>
+        </div>
+        <div class=" text-center m-3">
+          <button data-dismiss="modal" class="btn btn-success " [disabled]="!f.valid">Add Project</button>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+    </div>
+</ng-template>
+
+
+

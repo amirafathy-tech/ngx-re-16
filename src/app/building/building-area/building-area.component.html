@@ -1,0 +1,13 @@
+
+<div class="row">
+    <div class="col-xs-10">
+        <app-building-area-edit></app-building-area-edit>
+        <hr>
+        <ul class="list-group">
+            <a class="list-group-item " style="cursor: pointer" *ngFor="let record of records; let i = index"
+                (click)="onEditItem(i)">
+               <span class="fw-bold">Code:</span> {{ record.code}} - <span class="fw-bold">Description:</span>  {{ record.description }}
+            </a>
+        </ul>
+    </div>
+</div>

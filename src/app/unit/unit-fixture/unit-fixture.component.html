@@ -1,0 +1,12 @@
+<div class="row">
+    <div class="col-xs-10">
+       <app-unit-fixture-edit></app-unit-fixture-edit>
+        <hr>
+        <ul class="list-group">
+            <a class="list-group-item" style="cursor: pointer" *ngFor="let record of records; "
+                (click)="onEditItem(record.id)">
+                <span class="fw-bold">ID:</span> {{ record.id}} - <span class="fw-bold">Code:</span> {{ record.ufixtureId}} - <span class="fw-bold"> Description:</span> {{ record.ufixtureDescr }}
+            </a>
+        </ul>
+    </div>
+</div>
