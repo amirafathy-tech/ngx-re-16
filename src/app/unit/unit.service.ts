@@ -1,85 +1,48 @@
 import { Injectable } from '@angular/core';
-
 import { Subject } from 'rxjs';
 import { Unit } from './unit.model';
 import { LocalDate } from 'js-joda';
+import { ApiService } from '../ApiService.service';
 
 @Injectable()
 export class UnitService {
+  
   recordsChanged = new Subject<Unit[]>();
   startedEditing = new Subject<number>();
+  model: "units";
+  constructor(private apiService: ApiService) { }
+  private recordsApi: Unit[]
 
-  private records: Unit[] = [
-    new Unit(
-        1,
-        'Unit 1',
-        'Unit 1 Desc',
-        1,
-        LocalDate.of(2022, 11, 20), 
-        'blocking',
-        'salesphase',
-        LocalDate.of(2022, 11, 20),
-        LocalDate.of(2022, 11, 20),
-        'area',
-        20,
-        1,
-        1000,
-        LocalDate.of(2022, 11, 20),
-        1,
-        2
-      
-      ),
-      new Unit(
-        2,
-        'Unit 2',
-        'Unit 2 Desc',
-        1,
-        LocalDate.of(2022, 11, 20), 
-        'blocking',
-        'salesphase',
-        LocalDate.of(2022, 11, 20),
-        LocalDate.of(2022, 11, 20),
-        'area',
-        20,
-        1,
-        1000,
-        LocalDate.of(2022, 11, 20),
-        1,
-        2
-        )];
-
-
-  getRecords() {
-   // console.log(this.records.slice());
-    return this.records.slice();
+  getApiRecords() {
+    this.apiService.get<Unit[]>('units').subscribe(response => {
+      console.log(response);
+      this.recordsApi = response;
+      this.recordsChanged.next(this.recordsApi);
+    });
   }
+  addApiRecord(row: Unit) {
+    this.apiService.post<Unit>('units', row).subscribe((response: Unit) => {
+      console.log('Unit created:', response);
+      this.getApiRecords();
+    });
 
-  getRecord(index: number) {
-    return this.records[index];
   }
- 
+  updateApiRecord(id: number, row: any) {
+    console.log(this.apiService.put<Unit>(`units`, id, row));
+    this.apiService.put<Unit>('units', id, row).subscribe(response => {
+      console.log(response);
+      this.getApiRecords()
+    });
+  }
+  getApiRecord(index: number) {
+    return this.apiService.getID<Unit>('units', index)
+  }
+  deleteApiRecord(id: number) {
+    console.log(this.apiService.delete<Unit>(`units`, id));
+    this.apiService.delete<Unit>(`units`, id).subscribe(response => {
+      console.log(response);
+      this.getApiRecords();
+    })
 
-  addRecord(Unit: Unit) {
-    this.records.push(Unit);
-    //console.log(this.records);
-    this.recordsChanged.next(this.records.slice());
   }
-
-  addrecords(records: Unit[]) {
-    this.records.push(...records);
-    this.recordsChanged.next(this.records.slice());
-  }
-  updateRecord(index: number, newUnit: Unit) {
-    this.records[index] = newUnit;
-    console.log(this.records)
-    this.recordsChanged.next(this.records.slice());
-  }
-
-  deleteRecord(index: number) {
-    this.records.splice(index, 1);
-    console.log(this.records);
-    this.recordsChanged.next(this.records.slice());
-    console.log(this.recordsChanged);
-  }
-
 }

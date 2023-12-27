@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://dev.c-9205de0.kyma.ondemand.com'; 
+  private baseUrl = 'https://dev.c15b19b.kyma.ondemand.com';
 
   constructor(private http: HttpClient) { }
 
@@ -14,8 +14,9 @@ export class ApiService {
     const options = { params, headers };
     return this.http.get<T>(`${this.baseUrl}/${url}`, options);
   }
-  getID<T>(url: string,id:number, params?: HttpParams, headers?: HttpHeaders): Observable<T> {
+  getID<T>(url: string, id: number, params?: HttpParams, headers?: HttpHeaders): Observable<T> {
     const options = { params, headers };
+    console.log(this.http.get<T>(`${this.baseUrl}/${url}/${id}`, options));
     return this.http.get<T>(`${this.baseUrl}/${url}/${id}`, options);
   }
 
@@ -24,7 +25,7 @@ export class ApiService {
     return this.http.post<T>(`${this.baseUrl}/${url}`, body, options);
   }
 
-  put<T>(url: string,id:number, body: any, headers?: HttpHeaders): Observable<T> {
+  put<T>(url: string, id: number, body: any, headers?: HttpHeaders): Observable<T> {
     const options = { headers };
     return this.http.put<T>(`${this.baseUrl}/${url}/${id}`, body, options);
   }
@@ -34,7 +35,7 @@ export class ApiService {
     return this.http.patch<T>(`${this.baseUrl}/${url}`, body, options);
   }
 
-  delete<T>(url: string,id:number, headers?: HttpHeaders): Observable<T> {
+  delete<T>(url: string, id: number, headers?: HttpHeaders): Observable<T> {
     const options = { headers };
     return this.http.delete<T>(`${this.baseUrl}/${url}/${id}`, options);
   }

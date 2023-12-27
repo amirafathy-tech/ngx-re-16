@@ -17,6 +17,7 @@ export class ProjectAreaEditComponent {
   editedItemIndex: number;
   editedItem: ProjectArea;
 
+
   constructor(private projectAreaService: ProjectAreaService) { }
 
   ngOnInit() {
@@ -25,25 +26,35 @@ export class ProjectAreaEditComponent {
         (index: number) => {
           this.editedItemIndex = index;
           this.editMode = true;
-          this.editedItem = this.projectAreaService.getRecord(index);
-          this.slForm.setValue({
-            code: this.editedItem.code,
-            description: this.editedItem.description
-          })
-        }
-      );
+          this.projectAreaService.getApiRecord(index)
+            .subscribe((record: ProjectArea) => {
+              this.editedItem = record;
+              console.log(this.editedItem);
+
+              this.slForm.setValue({
+                projectArea: this.editedItem.projectArea,
+                description: this.editedItem.description
+              });
+            });
+        });
   }
 
-  onSubmit(form: NgForm) {
+  onSubmitApi(form: NgForm) {
     const value = form.value;
-    const newRecord = new ProjectArea(value.code, value.description);
+    const newRecord = new ProjectArea(value.projectArea, value.description);
+    console.log(newRecord);
+
     if (this.editMode) {
-      this.projectAreaService.updateRecord(this.editedItemIndex, newRecord);
+      const updatedRecord = { projectAreaCode: this.editedItemIndex, projectArea: value.projectArea, description: value.description };
+      console.log(updatedRecord);
+
+      this.projectAreaService.updateApiRecord(this.editedItemIndex, updatedRecord);
     } else {
-      this.projectAreaService.addRecord(newRecord);
+      this.projectAreaService.addApiRecord(newRecord)
     }
     this.editMode = false;
     form.reset();
+
   }
 
   onClear() {
@@ -52,12 +63,12 @@ export class ProjectAreaEditComponent {
   }
 
   onDelete() {
-    this.projectAreaService.deleteRecord(this.editedItemIndex);
+    this.projectAreaService.deleteApiRecord(this.editedItemIndex);
     this.onClear();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
+ 
 }

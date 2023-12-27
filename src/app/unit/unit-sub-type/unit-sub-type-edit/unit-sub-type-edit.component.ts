@@ -10,13 +10,11 @@ import { UnitSubTypeService } from '../unit-sub-type.service';
   // styleUrl: './unit-sub-type-edit.component.css'
 })
 export class UnitSubTypeEditComponent {
-
   @ViewChild('f', { static: false }) slForm: NgForm;
   subscription: Subscription;
   editMode = false;
   editedItemIndex: number;
   editedItem: UnitSubType;
-
   constructor(private unitSubTypeService: UnitSubTypeService) { }
 
   ngOnInit() {
@@ -25,25 +23,35 @@ export class UnitSubTypeEditComponent {
         (index: number) => {
           this.editedItemIndex = index;
           this.editMode = true;
-          this.editedItem = this.unitSubTypeService.getRecord(index);
-          this.slForm.setValue({
-            code: this.editedItem.code,
-            description: this.editedItem.description
-          })
-        }
-      );
+          this.unitSubTypeService.getApiRecord(index)
+            .subscribe((record: UnitSubType) => {
+              this.editedItem = record;
+              console.log(this.editedItem);
+
+              this.slForm.setValue({
+                subtypeId: this.editedItem.subtypeId,
+                subtypeDescr: this.editedItem.subtypeDescr
+              });
+            });
+        });
   }
 
-  onSubmit(form: NgForm) {
+  onSubmitApi(form: NgForm) {
     const value = form.value;
-    const newRecord = new UnitSubType(value.code, value.description);
+    const newRecord = new UnitSubType(value.subtypeId, value.subtypeDescr);
+    console.log(newRecord);
+
     if (this.editMode) {
-      this.unitSubTypeService.updateRecord(this.editedItemIndex, newRecord);
+      const updatedRecord = { unitSubtypeCode: this.editedItemIndex, subtypeId: value.subtypeId, subtypeDescr: value.subtypeDescr };
+      console.log(updatedRecord);
+
+      this.unitSubTypeService.updateApiRecord(this.editedItemIndex, updatedRecord);
     } else {
-      this.unitSubTypeService.addRecord(newRecord);
+      this.unitSubTypeService.addApiRecord(newRecord)
     }
     this.editMode = false;
     form.reset();
+
   }
 
   onClear() {
@@ -52,7 +60,7 @@ export class UnitSubTypeEditComponent {
   }
 
   onDelete() {
-    this.unitSubTypeService.deleteRecord(this.editedItemIndex);
+    this.unitSubTypeService.deleteApiRecord(this.editedItemIndex);
     this.onClear();
   }
 

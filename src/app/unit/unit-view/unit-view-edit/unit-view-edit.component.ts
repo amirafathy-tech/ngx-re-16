@@ -17,6 +17,7 @@ export class UnitViewEditComponent {
   editedItemIndex: number;
   editedItem: UnitView;
 
+
   constructor(private unitViewService: UnitViewService) { }
 
   ngOnInit() {
@@ -25,25 +26,35 @@ export class UnitViewEditComponent {
         (index: number) => {
           this.editedItemIndex = index;
           this.editMode = true;
-          this.editedItem = this.unitViewService.getRecord(index);
-          this.slForm.setValue({
-            code: this.editedItem.code,
-            description: this.editedItem.description
-          })
-        }
-      );
+          this.unitViewService.getApiRecord(index)
+            .subscribe((record: UnitView) => {
+              this.editedItem = record;
+              console.log(this.editedItem);
+
+              this.slForm.setValue({
+                viewId: this.editedItem.viewId,
+                viewDescr: this.editedItem.viewDescr
+              });
+            });
+        });
   }
 
-  onSubmit(form: NgForm) {
+  onSubmitApi(form: NgForm) {
     const value = form.value;
-    const newRecord = new UnitView(value.code, value.description);
+    const newRecord = new UnitView(value.viewId, value.viewDescr);
+    console.log(newRecord);
+
     if (this.editMode) {
-      this.unitViewService.updateRecord(this.editedItemIndex, newRecord);
+      const updatedRecord = { unitViewCode: this.editedItemIndex, viewId: value.viewId, viewDescr: value.viewDescr };
+      console.log(updatedRecord);
+
+      this.unitViewService.updateApiRecord(this.editedItemIndex, updatedRecord);
     } else {
-      this.unitViewService.addRecord(newRecord);
+      this.unitViewService.addApiRecord(newRecord)
     }
     this.editMode = false;
     form.reset();
+
   }
 
   onClear() {
@@ -52,14 +63,13 @@ export class UnitViewEditComponent {
   }
 
   onDelete() {
-    this.unitViewService.deleteRecord(this.editedItemIndex);
+    this.unitViewService.deleteApiRecord(this.editedItemIndex);
     this.onClear();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
 
 
 }

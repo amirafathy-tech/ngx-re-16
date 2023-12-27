@@ -1,9 +1,9 @@
 export class UnitFixture{
-    public uFixtureId:string;
-    public uFixtureDescr:string;    
-    constructor(uFixtureId:string,uFixtureDescr:string){
-        this.uFixtureId=uFixtureId;
-        this.uFixtureDescr=uFixtureDescr;
+    public fixtureId:string;
+    public fixtureDescr:string;    
+    constructor(fixtureId:string,fixtureDescr:string){
+        this.fixtureId=fixtureId;
+        this.fixtureDescr=fixtureDescr;
         
     }
     

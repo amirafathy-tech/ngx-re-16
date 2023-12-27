@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubnavComponent } from './subnav.component';
+import { AboutComponent } from './about.component';
 
-describe('SubnavComponent', () => {
-  let component: SubnavComponent;
-  let fixture: ComponentFixture<SubnavComponent>;
+describe('AboutComponent', () => {
+  let component: AboutComponent;
+  let fixture: ComponentFixture<AboutComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SubnavComponent]
+      declarations: [AboutComponent]
     });
-    fixture = TestBed.createComponent(SubnavComponent);
+    fixture = TestBed.createComponent(AboutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

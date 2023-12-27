@@ -16,7 +16,6 @@ export class UnitOrientationEditComponent {
   editMode = false;
   editedItemIndex: number;
   editedItem: UnitOrientation;
-
   constructor(private unitOrientationService: UnitOrientationService) { }
 
   ngOnInit() {
@@ -25,25 +24,35 @@ export class UnitOrientationEditComponent {
         (index: number) => {
           this.editedItemIndex = index;
           this.editMode = true;
-          this.editedItem = this.unitOrientationService.getRecord(index);
-          this.slForm.setValue({
-            code: this.editedItem.code,
-            description: this.editedItem.description
-          })
-        }
-      );
+          this.unitOrientationService.getApiRecord(index)
+            .subscribe((record: UnitOrientation) => {
+              this.editedItem = record;
+              console.log(this.editedItem);
+
+              this.slForm.setValue({
+                orientationId: this.editedItem.orientationId,
+                orientationDescr: this.editedItem.orientationDescr
+              });
+            });
+        });
   }
 
-  onSubmit(form: NgForm) {
+  onSubmitApi(form: NgForm) {
     const value = form.value;
-    const newRecord = new UnitOrientation(value.code, value.description);
+    const newRecord = new UnitOrientation(value.orientationId, value.orientationDescr);
+    console.log(newRecord);
+
     if (this.editMode) {
-      this.unitOrientationService.updateRecord(this.editedItemIndex, newRecord);
+      const updatedRecord = { orientationCode: this.editedItemIndex, orientationId: value.orientationId, orientationDescr: value.orientationDescr };
+      console.log(updatedRecord);
+
+      this.unitOrientationService.updateApiRecord(this.editedItemIndex, updatedRecord);
     } else {
-      this.unitOrientationService.addRecord(newRecord);
+      this.unitOrientationService.addApiRecord(newRecord)
     }
     this.editMode = false;
     form.reset();
+
   }
 
   onClear() {
@@ -52,13 +61,12 @@ export class UnitOrientationEditComponent {
   }
 
   onDelete() {
-    this.unitOrientationService.deleteRecord(this.editedItemIndex);
+    this.unitOrientationService.deleteApiRecord(this.editedItemIndex);
     this.onClear();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
 
 }

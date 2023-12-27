@@ -25,66 +25,53 @@ import { UnitAreaComponent } from './unit/unit-area/unit-area.component';
 import { AreaComponent } from './area/area.component';
 import { PaymentComponent } from './payment/payment.component';
 import { ShellbarSidebarComponent } from './shellbar/shellbar.component';
-import { ShellbarSideNavComponent } from './shellbar/shellbar.component.spec';
-import { NavbarComponent } from './navbar/navbar.component';
-import { BarComponent } from './bar/bar.component';
-import { SubnavComponent } from './subnav/subnav.component';
 import { ModelComponent } from './model/model.component';
+import { CommonModule } from '@angular/common';
+import { AboutComponent } from './about/about.component';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'city', component: CityComponent },
   { path: 'company', component: CompanyComponent },
-
-  { path: 'sub', component: SubnavComponent },
-  
-  { path: 'bar', component: BarComponent },
-  { path: 'side', component: ShellbarSideNavComponent },
-
-  { path: 'nav', component: NavbarComponent },
-  
+  { path: '', component: AboutComponent },
   { path: 'payment', component: PaymentComponent },
-
   { path: 'area', component: AreaComponent },
-
-  { path: 'building', component: BuildingComponent},
+  { path: 'building', component: BuildingComponent },
   { path: 'building-type', component: BuildingTypeComponent },
   { path: 'building-area', component: BuildingAreaComponent },
-
   { path: 'project', component: ProjectComponent },
   { path: 'project-area', component: ProjectAreaComponent },
   { path: 'profit', component: ProfitComponent },
   { path: 'currency', component: CurrencyComponent },
-
   { path: 'moc', component: MethodOfCalcComponent },
-
   { path: 'price-type', component: PriceTypeComponent },
-  
-  { path: 'unit', component: UnitComponent},
-  { path: 'unit-view', component: UnitViewComponent},
-  { path: 'unit-status', component: UnitStatusComponent},
-  { path: 'unit-floor', component: UnitFloorComponent},
-  { path: 'uom', component: UnitOfMeasureComponent},
-  { path: 'unit-usagetype', component: UsageTypeComponent},
-  { path: 'unit-subtype', component: UnitSubTypeComponent},
-  { path: 'unit-orientation', component: UnitOrientationComponent},
-  { path: 'unit-fixture', component: UnitFixtureComponent},
-  { path: 'unit-area', component: UnitAreaComponent},
-
+  { path: 'unit', component: UnitComponent },
+  { path: 'unit-view', component: UnitViewComponent },
+  { path: 'unit-status', component: UnitStatusComponent },
+  { path: 'unit-floor', component: UnitFloorComponent },
+  { path: 'uom', component: UnitOfMeasureComponent },
+  { path: 'unit-usagetype', component: UsageTypeComponent },
+  { path: 'unit-subtype', component: UnitSubTypeComponent },
+  { path: 'unit-orientation', component: UnitOrientationComponent },
+  { path: 'unit-fixture', component: UnitFixtureComponent },
+  { path: 'unit-area', component: UnitAreaComponent },
   // {
   //   path: 'unit',
   //   component: UnitComponent,
   //   children: [
   //     { path: 'unit-orientation', component: UnitOrientationComponent},
   //     { path: 'unit-fixture', component: UnitFixtureComponent },
-    
   //   ]
   // },
-  { path: '', component: ModelComponent },
+  { path: 'model', component: ModelComponent },
+  
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes)],
+  imports: [
+    RouterModule.forRoot(appRoutes),
+    CommonModule
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

@@ -37,10 +37,6 @@ export class UnitFixtureService {
   }
   getApiRecord(index:number) {
    return this.apiService.getID<UnitFixture>('unitfixture',index)
-  // this.apiService.getID<UnitFixture>('unitfixture',index).subscribe(response => {
-  //     console.log(response);
-      
-  // })
   }
   deleteApiRecord(id:number) {
     console.log(this.apiService.delete<UnitFixture>(`unitfixture`,id));

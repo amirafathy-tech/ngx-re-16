@@ -25,25 +25,35 @@ export class UnitStatusEditComponent {
         (index: number) => {
           this.editedItemIndex = index;
           this.editMode = true;
-          this.editedItem = this.unitStatusService.getRecord(index);
-          this.slForm.setValue({
-            code: this.editedItem.code,
-            description: this.editedItem.description
-          })
-        }
-      );
+          this.unitStatusService.getApiRecord(index)
+            .subscribe((record: UnitStatus) => {
+              this.editedItem = record;
+              console.log(this.editedItem);
+
+              this.slForm.setValue({
+                statusId: this.editedItem.statusId,
+                statusDescr: this.editedItem.statusDescr
+              });
+            });
+        });
   }
 
-  onSubmit(form: NgForm) {
+  onSubmitApi(form: NgForm) {
     const value = form.value;
-    const newRecord = new UnitStatus(value.code, value.description);
+    const newRecord = new UnitStatus(value.statusId, value.statusDescr);
+    console.log(newRecord);
+
     if (this.editMode) {
-      this.unitStatusService.updateRecord(this.editedItemIndex, newRecord);
+      const updatedRecord = { unitStatusCode: this.editedItemIndex, statusId: value.statusId, statusDescr: value.statusDescr };
+      console.log(updatedRecord);
+
+      this.unitStatusService.updateApiRecord(this.editedItemIndex, updatedRecord);
     } else {
-      this.unitStatusService.addRecord(newRecord);
+      this.unitStatusService.addApiRecord(newRecord)
     }
     this.editMode = false;
     form.reset();
+
   }
 
   onClear() {
@@ -52,7 +62,7 @@ export class UnitStatusEditComponent {
   }
 
   onDelete() {
-    this.unitStatusService.deleteRecord(this.editedItemIndex);
+    this.unitStatusService.deleteApiRecord(this.editedItemIndex);
     this.onClear();
   }
 

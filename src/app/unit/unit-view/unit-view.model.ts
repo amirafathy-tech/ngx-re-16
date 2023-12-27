@@ -1,10 +1,10 @@
-export class UnitView{
-    public code:string;
-    public description:string;    
-    constructor(code:string,desc:string){
-        this.code=code;
-        this.description=desc;
-        
+export class UnitView {
+    public viewId: string;
+    public viewDescr: string;
+    constructor(viewId: string, viewDescr: string) {
+        this.viewId = viewId;
+        this.viewDescr = viewDescr;
+
     }
-    
+
 }

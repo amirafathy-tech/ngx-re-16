@@ -1,9 +1,9 @@
 export class UnitStatus{
-    public code:string;
-    public description:string;    
-    constructor(code:string,desc:string){
-        this.code=code;
-        this.description=desc;
+    public statusId:string;
+    public statusDescr:string;    
+    constructor(statusId:string,statusDescr:string){
+        this.statusId=statusId;
+        this.statusDescr=statusDescr;
         
     }
     

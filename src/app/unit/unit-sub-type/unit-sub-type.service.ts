@@ -2,51 +2,47 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { UnitSubType } from './unit-sub-type.model';
+import { ApiService } from 'src/app/ApiService.service';
 
 @Injectable()
 export class UnitSubTypeService {
   recordsChanged = new Subject<UnitSubType[]>();
   startedEditing = new Subject<number>();
+  model: "unitsubtypes";
+  constructor(private apiService: ApiService) { }
+  private recordsApi: UnitSubType[]
 
-  private records: UnitSubType[] = [
-    new UnitSubType(
-      'UnitSubType 1',
-      'UnitSubType 1 Desc'),
-      new UnitSubType(
-        'UnitSubType 2',
-        'UnitSubType 2 Desc'),
-        new UnitSubType(
-            'UnitSubType 3',
-            'UnitSubType 3 Desc'),
-  ];
-
-
-  getRecords() {
-    return this.records.slice();
+  getApiRecords() {
+    this.apiService.get<UnitSubType[]>('unitsubtypes').subscribe(response => {
+      console.log(response);
+      this.recordsApi = response;
+      this.recordsChanged.next(this.recordsApi);
+    });
   }
+  addApiRecord(row: UnitSubType) {
+    this.apiService.post<UnitSubType>('unitsubtypes', row).subscribe((response: UnitSubType) => {
+      console.log('UnitFloor created:', response);
+      this.getApiRecords();
+    });
 
-  getRecord(index: number) {
-    return this.records[index];
+    return this.apiService.post<UnitSubType>('unitsubtypes', row);
   }
- 
+  updateApiRecord(id: number, row: any) {
+    console.log(this.apiService.put<UnitSubType>(`unitsubtypes`, id, row));
+    this.apiService.put<UnitSubType>('unitsubtypes', id, row).subscribe(response => {
+      console.log(response);
+      this.getApiRecords()
+    });
+  }
+  getApiRecord(index: number) {
+    return this.apiService.getID<UnitSubType>('unitsubtypes', index)
+  }
+  deleteApiRecord(id: number) {
+    console.log(this.apiService.delete<UnitSubType>(`unitsubtypes`, id));
+    this.apiService.delete<UnitSubType>(`unitsubtypes`, id).subscribe(response => {
+      console.log(response);
+      this.getApiRecords();
+    })
 
-  addRecord(UnitSubType: UnitSubType) {
-    this.records.push(UnitSubType);
-    this.recordsChanged.next(this.records.slice());
   }
-
-  addrecords(records: UnitSubType[]) {
-    this.records.push(...records);
-    this.recordsChanged.next(this.records.slice());
-  }
-  updateRecord(index: number, newUnitSubType: UnitSubType) {
-    this.records[index] = newUnitSubType;
-    this.recordsChanged.next(this.records.slice());
-  }
-
-  deleteRecord(index: number) {
-    this.records.splice(index, 1);
-    this.recordsChanged.next(this.records.slice());
-  }
-
 }

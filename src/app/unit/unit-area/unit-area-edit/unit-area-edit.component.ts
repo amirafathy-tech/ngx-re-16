@@ -7,7 +7,7 @@ import { UnitAreaService } from '../unit-area.service';
 @Component({
   selector: 'app-unit-area-edit',
   templateUrl: './unit-area-edit.component.html',
- // styleUrl: './unit-area-edit.component.css'
+  // styleUrl: './unit-area-edit.component.css'
 })
 export class UnitAreaEditComponent {
 
@@ -16,7 +16,6 @@ export class UnitAreaEditComponent {
   editMode = false;
   editedItemIndex: number;
   editedItem: UnitArea;
-
   constructor(private unitAreaService: UnitAreaService) { }
 
   ngOnInit() {
@@ -25,25 +24,35 @@ export class UnitAreaEditComponent {
         (index: number) => {
           this.editedItemIndex = index;
           this.editMode = true;
-          this.editedItem = this.unitAreaService.getRecord(index);
-          this.slForm.setValue({
-            code: this.editedItem.code,
-            description: this.editedItem.description
-          })
-        }
-      );
+          this.unitAreaService.getApiRecord(index)
+            .subscribe((record: UnitArea) => {
+              this.editedItem = record;
+              console.log(this.editedItem);
+
+              this.slForm.setValue({
+                unitArea: this.editedItem.unitArea,
+                description: this.editedItem.description
+              });
+            });
+        });
   }
 
-  onSubmit(form: NgForm) {
+  onSubmitApi(form: NgForm) {
     const value = form.value;
-    const newRecord = new UnitArea(value.code, value.description);
+    const newRecord = new UnitArea(value.unitArea, value.description);
+    console.log(newRecord);
+
     if (this.editMode) {
-      this.unitAreaService.updateRecord(this.editedItemIndex, newRecord);
+      const updatedRecord = { unitAreaCode: this.editedItemIndex, unitArea: value.unitArea, description: value.description };
+      console.log(updatedRecord);
+
+      this.unitAreaService.updateApiRecord(this.editedItemIndex, updatedRecord);
     } else {
-      this.unitAreaService.addRecord(newRecord);
+      this.unitAreaService.addApiRecord(newRecord)
     }
     this.editMode = false;
     form.reset();
+
   }
 
   onClear() {
@@ -52,12 +61,14 @@ export class UnitAreaEditComponent {
   }
 
   onDelete() {
-    this.unitAreaService.deleteRecord(this.editedItemIndex);
+    this.unitAreaService.deleteApiRecord(this.editedItemIndex);
     this.onClear();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+
+
 
 }

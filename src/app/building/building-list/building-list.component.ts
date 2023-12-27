@@ -7,14 +7,11 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { Project } from 'src/app/project/project.model';
 import { Profit } from 'src/app/profit/profit.model';
 import { BuildingType } from 'src/app/building-type/building-type.model';
-import { ProjectService } from 'src/app/project/project.service';
 import { ApiService } from 'src/app/ApiService.service';
-import { ProfitService } from 'src/app/profit/profit.service';
-import { BuildingTypeService } from 'src/app/building-type/building-type.service';
 @Component({
   selector: 'app-building-list',
   templateUrl: './building-list.component.html',
- // styleUrl: './building-list.component.css'
+  // styleUrl: './building-list.component.css'
 })
 export class BuildingListComponent implements OnInit {
   closeResult: string;
@@ -36,13 +33,9 @@ export class BuildingListComponent implements OnInit {
   selectedProfitCode: number;
   selectedBuildingTypeCode: number;
 
-  updatedProjectCode: number;
-  updatedProfitCode: number;
-  updatedBuildingTypeCode: number;
-
   constructor(private apiService: ApiService,
-     private buildingService:BuildingService,
-     private modalService: NgbModal, private fb: FormBuilder) {
+    private buildingService: BuildingService,
+    private modalService: NgbModal, private fb: FormBuilder) {
   }
   getProject() {
     this.apiService.get<Project[]>('projects').subscribe(response => {
@@ -80,7 +73,7 @@ export class BuildingListComponent implements OnInit {
       buildingDescription: [''],
       oldNumber: [''],
       validFrom: [''],
-      numberOfFloors:[''],
+      numberOfFloors: [''],
       profit: [''],
     })
   }
@@ -89,8 +82,10 @@ export class BuildingListComponent implements OnInit {
     console.log(this.selectedProjectCode);
     console.log(parseInt(this.selectedProjectCode.toString(), 10));
     const newRecord = new Building(parseInt(this.selectedProfitCode.toString(), 10),
-    parseInt(this.selectedProjectCode.toString(), 10), parseInt(this.selectedBuildingTypeCode.toString(), 10),
-    value.buildingId,value.buildingDescription,value.oldNumber, value.validFrom,parseInt(value.numberOfFloors.toString(), 10), value.profit);
+      parseInt(this.selectedProjectCode.toString(), 10),
+      parseInt(this.selectedBuildingTypeCode.toString(), 10),
+      value.buildingId, value.buildingDescription, value.oldNumber,
+      value.validFrom, parseInt(value.numberOfFloors.toString(), 10), value.profit);
     console.log(newRecord);
     this.buildingService.addApiRecord(newRecord);
     console.log(this.buildingService.addApiRecord(newRecord));
@@ -98,55 +93,56 @@ export class BuildingListComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-
-  openDetails(targetModal, project: Project) {
+  openDetails(targetModal, building: Building) {
     this.modalService.open(targetModal, {
       centered: true,
       backdrop: 'static',
       size: 'lg'
     });
-    document.getElementById('companyCode').setAttribute('value', String(project.companyCode));
-    document.getElementById('profitCode').setAttribute('value', String(project.profitCode));
-    document.getElementById('locationCode').setAttribute('value', String(project.locationCode));
-    document.getElementById('projectId').setAttribute('value', project.projectId);
-    document.getElementById('projectDescription').setAttribute('value', project.projectDescription);
-    document.getElementById('validFrom').setAttribute('value', String(project.validFrom));
-    document.getElementById('profit').setAttribute('value', String(project.profit));
+    document.getElementById('profitCode').setAttribute('value', String(building.profitCode));
+    document.getElementById('projectCode').setAttribute('value', String(building.projectCode));
+    document.getElementById('buildingTypeCode').setAttribute('value', String(building.buildingTypeCode));
+    document.getElementById('buildingId').setAttribute('value', building.buildingId);
+    document.getElementById('buildingDescription').setAttribute('value', building.buildingDescription);
+    document.getElementById('oldNumber').setAttribute('value', String(building.oldNumber));
+    document.getElementById('validFrom').setAttribute('value', String(building.validFrom));
+    document.getElementById('numberOfFloors').setAttribute('value', String(building.numberOfFloors));
+    document.getElementById('profit').setAttribute('value', String(building.profit));
   }
- 
 
-  openEdit(targetModal, project: Project) {
+  openEdit(targetModal, building: Building) {
     this.modalService.open(targetModal, {
       backdrop: 'static',
       size: 'lg'
     });
-    console.log(project);
-    this.editedItemIndex=project.id;
+    console.log(building);
+    this.editedItemIndex = building.buildingCode;
     console.log(this.editedItemIndex);
-    
+
     this.editForm.patchValue({
-      companyCode:Number(this.updatedProjectCode),
-      profitCode:Number(this.updatedProfitCode),
-      locationCode:Number(this.updatedBuildingTypeCode),
-      projectId: project.projectId,
-      projectDescription: project.projectDescription,
-      validFrom: project.validFrom,
-      profit: project.profit
+      profitCode: Number(building.profitCode),
+      projectCode: Number(building.projectCode),
+      buildingTypeCode: Number(building.buildingTypeCode),
+      buildingId: building.buildingId,
+      buildingDescription: building.buildingDescription,
+      oldNumber: building.oldNumber,
+      validFrom: building.validFrom,
+      numberOfFloors: Number(building.numberOfFloors),
+      profit: building.profit
     });
-    
+
   }
   onSave() {// for edit 
     console.log(this.editForm.value);
-    const convertedCompanyCode = Number(this.editForm.value.companyCode);
     const convertedProfitCode = Number(this.editForm.value.profitCode);
-    const convertedLocationCode = Number(this.editForm.value.locationCode);
-    console.log(this.updatedProjectCode);
+    const convertedProjectCode = Number(this.editForm.value.projectCode);
+    const convertedBuildingTypeCode = Number(this.editForm.value.buildingTypeCode);
     console.log(this.editForm.value.companyCode);
-    console.log(convertedCompanyCode);
+    console.log(convertedBuildingTypeCode);
     this.editForm.patchValue({
-      companyCode: convertedCompanyCode,
-      profitCode:convertedProfitCode,
-      locationCode:convertedLocationCode
+      profitCode: convertedProfitCode,
+      projectCode: convertedProjectCode,
+      buildingTypeCode: convertedBuildingTypeCode
     });
     console.log(this.editForm.value);
     this.buildingService.updateApiRecord(this.editedItemIndex, this.editForm.value);
@@ -154,10 +150,10 @@ export class BuildingListComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-  openDelete(targetModal, project: Project) {
-    this.deleteId = project.id;
+  openDelete(targetModal, building: Building) {
+    this.deleteId = building.buildingCode;
     console.log(this.deleteId);
-    
+
     this.modalService.open(targetModal, {
       backdrop: 'static',
       size: 'lg'
@@ -172,7 +168,6 @@ export class BuildingListComponent implements OnInit {
   }
   onClear() {
     this.slForm.reset();
-    //this.editMode = false;
   }
   // for add modal
   open(content) {

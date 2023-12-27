@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 @Component({
   selector: 'app-unit-floor',
   templateUrl: './unit-floor.component.html',
- // styleUrl: './unit-floor.component.css',
+  // styleUrl: './unit-floor.component.css',
   providers: [UnitFloorService]
 })
 export class UnitFloorComponent {
@@ -16,11 +16,11 @@ export class UnitFloorComponent {
   constructor(private unitFloorService: UnitFloorService) { }
 
   ngOnInit() {
-   this.unitFloorService.getApiRecords();
-   this.subscription =this.unitFloorService.recordsChanged.subscribe((records: UnitFloor[]) => {
-     this.records = records;
-     console.log(this.records);
-   });
+    this.unitFloorService.getApiRecords();
+    this.subscription = this.unitFloorService.recordsChanged.subscribe((records: UnitFloor[]) => {
+      this.records = records;
+      console.log(this.records);
+    });
   }
   onEditItem(index: number) {
     this.unitFloorService.startedEditing.next(index);

@@ -16,8 +16,6 @@ export class ProfitEditComponent {
   editMode = false;
   editedItemIndex: number;
   editedItem: Profit;
-
-
   constructor(private profitService: ProfitService) { }
 
   ngOnInit() {

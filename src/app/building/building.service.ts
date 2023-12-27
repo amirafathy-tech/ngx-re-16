@@ -26,7 +26,7 @@ export class BuildingService {
       this.getApiRecords();
     });
 
-    return this.apiService.post<Building>('buildings', row);
+    //return this.apiService.post<Building>('buildings', row);
   }
   updateApiRecord(id: number, row: any) {
     console.log(this.apiService.put<Building>(`buildings`, id, row));

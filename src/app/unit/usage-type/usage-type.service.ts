@@ -2,51 +2,48 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { UsageType } from './usage-type.model';
+import { ApiService } from 'src/app/ApiService.service';
 
 @Injectable()
-export class UsageTypeService{
+export class UsageTypeService {
   recordsChanged = new Subject<UsageType[]>();
   startedEditing = new Subject<number>();
+  model: "usagetype";
+  constructor(private apiService: ApiService) { }
+  private recordsApi: UsageType[]
 
-  private records: UsageType[] = [
-    new UsageType(
-      'UsageType 1',
-      'UsageType 1 Desc'),
-      new UsageType(
-        'UsageType 2',
-        'UsageType 2 Desc'),
-        new UsageType(
-            'UsageType 3',
-            'UsageType 3 Desc'),
-  ];
-
-
-  getRecords() {
-    return this.records.slice();
+  getApiRecords() {
+    this.apiService.get<UsageType[]>('usagetype').subscribe(response => {
+      console.log(response);
+      this.recordsApi = response;
+      this.recordsChanged.next(this.recordsApi);
+    });
   }
+  addApiRecord(row: UsageType) {
+    this.apiService.post<UsageType>('usagetype', row).subscribe((response: UsageType) => {
+      console.log('UnitFloor created:', response);
+      this.getApiRecords();
+    });
 
-  getRecord(index: number) {
-    return this.records[index];
+    return this.apiService.post<UsageType>('usagetype', row);
   }
- 
+  updateApiRecord(id: number, row: any) {
+    console.log(this.apiService.put<UsageType>(`usagetype`, id, row));
+    this.apiService.put<UsageType>('usagetype', id, row).subscribe(response => {
+      console.log(response);
+      this.getApiRecords()
+    });
+  }
+  getApiRecord(index: number) {
+    return this.apiService.getID<UsageType>('usagetype', index)
+  }
+  deleteApiRecord(id: number) {
+    console.log(this.apiService.delete<UsageType>(`usagetype`, id));
+    this.apiService.delete<UsageType>(`usagetype`, id).subscribe(response => {
+      console.log(response);
+      this.getApiRecords();
+    })
 
-  addRecord(UsageType: UsageType) {
-    this.records.push(UsageType);
-    this.recordsChanged.next(this.records.slice());
-  }
-
-  addrecords(records: UsageType[]) {
-    this.records.push(...records);
-    this.recordsChanged.next(this.records.slice());
-  }
-  updateRecord(index: number, newUsageType: UsageType) {
-    this.records[index] = newUsageType;
-    this.recordsChanged.next(this.records.slice());
-  }
-
-  deleteRecord(index: number) {
-    this.records.splice(index, 1);
-    this.recordsChanged.next(this.records.slice());
   }
 
 }

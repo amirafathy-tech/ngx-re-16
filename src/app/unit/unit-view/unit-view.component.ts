@@ -6,7 +6,7 @@ import { UnitView } from './unit-view.model';
 @Component({
   selector: 'app-unit-view',
   templateUrl: './unit-view.component.html',
-  
+
   providers: [UnitViewService]
 })
 export class UnitViewComponent {
@@ -16,18 +16,15 @@ export class UnitViewComponent {
   constructor(private unitViewService: UnitViewService) { }
 
   ngOnInit() {
-    this.records = this.unitViewService.getRecords();
-    this.subscription = this.unitViewService.recordsChanged
-      .subscribe(
-        (records: UnitView[]) => {
-          this.records = records;
-        }
-      );
+    this.unitViewService.getApiRecords();
+    this.subscription = this.unitViewService.recordsChanged.subscribe((records: UnitView[]) => {
+      this.records = records;
+      console.log(this.records);
+    });
   }
   onEditItem(index: number) {
     this.unitViewService.startedEditing.next(index);
   }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

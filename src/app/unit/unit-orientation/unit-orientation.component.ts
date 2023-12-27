@@ -16,18 +16,15 @@ export class UnitOrientationComponent {
   constructor(private unitOrientationService: UnitOrientationService) { }
 
   ngOnInit() {
-    this.records = this.unitOrientationService.getRecords();
-    this.subscription = this.unitOrientationService.recordsChanged
-      .subscribe(
-        (records: UnitOrientation[]) => {
-          this.records = records;
-        }
-      );
+   this.unitOrientationService.getApiRecords();
+   this.subscription =this.unitOrientationService.recordsChanged.subscribe((records: UnitOrientation[]) => {
+     this.records = records;
+     console.log(this.records);
+   });
   }
   onEditItem(index: number) {
     this.unitOrientationService.startedEditing.next(index);
   }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

@@ -1,9 +1,11 @@
 <app-header></app-header>
-<!-- <app-navbar> </app-navbar> -->
-
-<div class="container ">
-  <div class="my-overlay" *ngIf="showOverlay">
-    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-  <router-outlet class="m-auto"></router-outlet>
 </div>
+<!-- <app-footer></app-footer> -->
+
+<ng-http-loader></ng-http-loader>

@@ -6,7 +6,7 @@ import { UnitOfMeasure } from './unit-of-measure.model';
 @Component({
   selector: 'app-unit-of-measure',
   templateUrl: './unit-of-measure.component.html',
- // styleUrl: './unit-of-measure.component.css',
+  // styleUrl: './unit-of-measure.component.css',
   providers: [UnitOfMeasureService]
 })
 export class UnitOfMeasureComponent {
@@ -16,18 +16,15 @@ export class UnitOfMeasureComponent {
   constructor(private unitOfMeasureService: UnitOfMeasureService) { }
 
   ngOnInit() {
-    this.records = this.unitOfMeasureService.getRecords();
-    this.subscription = this.unitOfMeasureService.recordsChanged
-      .subscribe(
-        (records: UnitOfMeasure[]) => {
-          this.records = records;
-        }
-      );
+    this.unitOfMeasureService.getApiRecords();
+    this.subscription = this.unitOfMeasureService.recordsChanged.subscribe((records: UnitOfMeasure[]) => {
+      this.records = records;
+      console.log(this.records);
+    });
   }
   onEditItem(index: number) {
     this.unitOfMeasureService.startedEditing.next(index);
   }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

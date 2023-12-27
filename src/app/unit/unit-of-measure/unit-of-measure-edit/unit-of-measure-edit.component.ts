@@ -7,16 +7,15 @@ import { UnitOfMeasureService } from '../unit-of-measure.service';
 @Component({
   selector: 'app-unit-of-measure-edit',
   templateUrl: './unit-of-measure-edit.component.html',
- // styleUrl: './unit-of-measure-edit.component.css'
+  // styleUrl: './unit-of-measure-edit.component.css'
 })
 export class UnitOfMeasureEditComponent {
-  
+
   @ViewChild('f', { static: false }) slForm: NgForm;
   subscription: Subscription;
   editMode = false;
   editedItemIndex: number;
   editedItem: UnitOfMeasure;
-
   constructor(private unitOfMeasureService: UnitOfMeasureService) { }
 
   ngOnInit() {
@@ -25,25 +24,35 @@ export class UnitOfMeasureEditComponent {
         (index: number) => {
           this.editedItemIndex = index;
           this.editMode = true;
-          this.editedItem = this.unitOfMeasureService.getRecord(index);
-          this.slForm.setValue({
-            code: this.editedItem.code,
-            description: this.editedItem.description
-          })
-        }
-      );
+          this.unitOfMeasureService.getApiRecord(index)
+            .subscribe((record: UnitOfMeasure) => {
+              this.editedItem = record;
+              console.log(this.editedItem);
+
+              this.slForm.setValue({
+                uomID: this.editedItem.uomID,
+                uomDescr: this.editedItem.uomDescr
+              });
+            });
+        });
   }
 
-  onSubmit(form: NgForm) {
+  onSubmitApi(form: NgForm) {
     const value = form.value;
-    const newRecord = new UnitOfMeasure(value.code, value.description);
+    const newRecord = new UnitOfMeasure(value.uomID, value.uomDescr);
+    console.log(newRecord);
+
     if (this.editMode) {
-      this.unitOfMeasureService.updateRecord(this.editedItemIndex, newRecord);
+      const updatedRecord = { measurementCode: this.editedItemIndex, uomID: value.uomID, uomDescr: value.uomDescr };
+      console.log(updatedRecord);
+
+      this.unitOfMeasureService.updateApiRecord(this.editedItemIndex, updatedRecord);
     } else {
-      this.unitOfMeasureService.addRecord(newRecord);
+      this.unitOfMeasureService.addApiRecord(newRecord)
     }
     this.editMode = false;
     form.reset();
+
   }
 
   onClear() {
@@ -52,7 +61,7 @@ export class UnitOfMeasureEditComponent {
   }
 
   onDelete() {
-    this.unitOfMeasureService.deleteRecord(this.editedItemIndex);
+    this.unitOfMeasureService.deleteApiRecord(this.editedItemIndex);
     this.onClear();
   }
 

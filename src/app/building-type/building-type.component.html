@@ -4,9 +4,10 @@
         <hr>
         <ul class="list-group">
             <a class="list-group-item" style="cursor: pointer" *ngFor="let record of records; "
-                (click)="onEditItem(record.id)">
-                <span class="fw-bold">ID:</span> {{ record.id}} - <span class="fw-bold">Code:</span> {{ record.buildingTypeId}} - <span class="fw-bold"> Description:</span> {{ record.buildingTypeDescr }}
+                (click)="onEditItem(record.buildingTypeCode)">
+                <span class="fw-bold">ID:</span> {{ record.buildingTypeCode}} - <span class="fw-bold">Code:</span> {{ record.buildingTypeId}} - <span class="fw-bold"> Description:</span> {{ record.buildingTypeDescr }}
             </a>
         </ul>
     </div>
 </div>
+<ng-http-loader></ng-http-loader>

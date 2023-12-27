@@ -16,21 +16,16 @@ export class UsageTypeComponent {
   constructor(private usageTypeService: UsageTypeService) { }
 
   ngOnInit() {
-    this.records = this.usageTypeService.getRecords();
-    this.subscription = this.usageTypeService.recordsChanged
-      .subscribe(
-        (records: UsageType[]) => {
-          this.records = records;
-        }
-      );
+    this.usageTypeService.getApiRecords();
+    this.subscription = this.usageTypeService.recordsChanged.subscribe((records: UsageType[]) => {
+      this.records = records;
+      console.log(this.records);
+    });
   }
   onEditItem(index: number) {
     this.usageTypeService.startedEditing.next(index);
   }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
-
 }

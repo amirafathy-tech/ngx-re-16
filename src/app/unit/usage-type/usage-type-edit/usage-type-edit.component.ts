@@ -18,6 +18,7 @@ export class UsageTypeEditComponent {
   editedItemIndex: number;
   editedItem: UsageType;
 
+
   constructor(private usageTypeService: UsageTypeService) { }
 
   ngOnInit() {
@@ -26,25 +27,35 @@ export class UsageTypeEditComponent {
         (index: number) => {
           this.editedItemIndex = index;
           this.editMode = true;
-          this.editedItem = this.usageTypeService.getRecord(index);
-          this.slForm.setValue({
-            code: this.editedItem.code,
-            description: this.editedItem.description
-          })
-        }
-      );
+          this.usageTypeService.getApiRecord(index)
+            .subscribe((record: UsageType) => {
+              this.editedItem = record;
+              console.log(this.editedItem);
+
+              this.slForm.setValue({
+                usageId: this.editedItem.usageId,
+                usageDescr: this.editedItem.usageDescr
+              });
+            });
+        });
   }
 
-  onSubmit(form: NgForm) {
+  onSubmitApi(form: NgForm) {
     const value = form.value;
-    const newRecord = new UsageType(value.code, value.description);
+    const newRecord = new UsageType(value.usageId, value.usageDescr);
+    console.log(newRecord);
+
     if (this.editMode) {
-      this.usageTypeService.updateRecord(this.editedItemIndex, newRecord);
+      const updatedRecord = { usageTypeCode: this.editedItemIndex, usageId: value.usageId, usageDescr: value.usageDescr };
+      console.log(updatedRecord);
+
+      this.usageTypeService.updateApiRecord(this.editedItemIndex, updatedRecord);
     } else {
-      this.usageTypeService.addRecord(newRecord);
+      this.usageTypeService.addApiRecord(newRecord)
     }
     this.editMode = false;
     form.reset();
+
   }
 
   onClear() {
@@ -53,14 +64,13 @@ export class UsageTypeEditComponent {
   }
 
   onDelete() {
-    this.usageTypeService.deleteRecord(this.editedItemIndex);
+    this.usageTypeService.deleteApiRecord(this.editedItemIndex);
     this.onClear();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
 
 
 }

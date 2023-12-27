@@ -6,11 +6,7 @@
 </fd-toolbar>
 
 <table fd-table class="table  table-striped table-hover">
-  <div *ngIf="!records.length"> 
-    <div class="spinner-border m-5" role="status"> 
-        <p>Loading....</p>
-      </div> 
-</div> 
+
   <thead fd-table-header>
     <tr fd-table-row>
       <th fd-table-cell> ID</th>
@@ -21,8 +17,8 @@
   </thead>
   <tbody fd-table-body>
     <tr *ngFor="let record of records" fd-table-row>
-    
-      <td fd-table-cell><span>{{record.id}}</span></td>
+
+      <td fd-table-cell><span>{{record.projectCode}}</span></td>
       <td fd-table-cell><span>{{record.projectId}}</span></td>
       <td fd-table-cell><span>{{record.projectDescription}}</span></td>
       <td fd-table-cell>
@@ -36,7 +32,6 @@
     </tr>
   </tbody>
 </table>
-
 
 <!-- Add New Modal -->
 <ng-template #content let-modal>
@@ -54,7 +49,7 @@
           <select id="companyCode" name="companyCode" type="number" aria-placeholder="Select Company Code"
             [(ngModel)]="selectedCompanyCode" class="form-control">
             <option value="" disabled selected>Select a Company Code</option>
-            <option *ngFor="let code of companyCodes" [value]="code.id" type="number">{{ code.companyCodeId
+            <option *ngFor="let code of companyCodes" [value]="code.companyCode" type="number">{{ code.companyCodeId
               }}-{{code.companyCodeDescription}}</option>
           </select>
         </div>
@@ -65,7 +60,7 @@
           <select id="profitCode" name="profitCode" type="number" aria-placeholder="Select Profit Code"
             [(ngModel)]="selectedProfitCode" class="form-control">
             <option value="" disabled selected>Select a Profit Code</option>
-            <option *ngFor="let code of profitCodes" [value]="code.id" type="number">{{ code.profitId
+            <option *ngFor="let code of profitCodes" [value]="code.profitCode" type="number">{{ code.profitId
               }}-{{code.profitDescr}}</option>
           </select>
         </div>
@@ -76,7 +71,7 @@
           <select id="locationCode" name="locationCode" type="number" aria-placeholder="Select Location Code"
             [(ngModel)]="selectedLocationCode" class="form-control">
             <option value="" disabled selected>Select a Location Code</option>
-            <option *ngFor="let code of locationCodes" [value]="code.id" type="number">{{ code.locationId
+            <option *ngFor="let code of locationCodes" [value]="code.locationCode" type="number">{{ code.locationId
               }}-{{code.regionalLocation}}</option>
           </select>
         </div>
@@ -84,7 +79,7 @@
       <div class="form-group">
         <label for="projectId">Project ID:</label>
         <div class="input-group">
-          <input id="projectId" name="projectId" type="text" required class="form-control" ngModel>
+          <input id="projectId" name="projectId" type="text" required maxlength="8" class="form-control" ngModel>
         </div>
       </div>
 
@@ -130,52 +125,49 @@
       <div class="form-group">
         <label for="companyCode">ComapnayCode:</label>
         <div class="input-group">
-          <input id="companyCode" class="form-control">
+          <input id="companyCode" class="form-control" readonly>
         </div>
       </div>
       <div class="form-group">
         <label for="profitCode">ProfitCode:</label>
         <div class="input-group">
-          <input id="profitCode" class="form-control">
+          <input id="profitCode" class="form-control" readonly>
         </div>
       </div>
       <div class="form-group">
         <label for="locationCode">LocationCode:</label>
         <div class="input-group">
-          <input id="locationCode" class="form-control">
+          <input id="locationCode" class="form-control" readonly>
         </div>
       </div>
       <div class="form-group">
         <label for="projectId">ID:</label>
         <div class="input-group">
-          <input id="projectId" class="form-control">
+          <input id="projectId" class="form-control" readonly>
         </div>
       </div>
 
       <div class="form-group">
         <label for="projectDescription">Description:</label>
         <div class="input-group">
-          <input id="projectDescription" class="form-control">
+          <input id="projectDescription" class="form-control" readonly>
         </div>
       </div>
       <div class="form-group">
         <label for="validFrom">Valid Date:</label>
         <div class="input-group">
-          <input id="validFrom" class="form-control">
+          <input id="validFrom" class="form-control" readonly>
         </div>
       </div>
       <div class="form-group">
         <label for="profit">Profit:</label>
         <div class="input-group">
-          <input id="profit" class="form-control">
+          <input id="profit" class="form-control" readonly>
         </div>
       </div>
-
     </form>
   </div>
   <div class="modal-footer">
-
-
     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
   </div>
 </ng-template>
@@ -197,7 +189,7 @@
           <select id="companyCode" name="companyCode" type="number" aria-placeholder="Select Company Code"
             formControlName="companyCode" class="form-control" (change)="updatedCompanyCode">
             <option value="" disabled selected>Select a Company Code</option>
-            <option *ngFor="let code of companyCodes" [value]="code.id" type="number">{{ code.companyCodeId
+            <option *ngFor="let code of companyCodes" [value]="code.companyCode" type="number">{{ code.companyCodeId
               }}-{{code.companyCodeDescription}}</option>
           </select>
         </div>
@@ -208,7 +200,7 @@
           <select id="profitCode" name="profitCode" type="number" aria-placeholder="Select Profit Code"
             formControlName="profitCode" class="form-control" (change)="updatedProfitCode">
             <option value="" disabled selected>Select a Profit Code</option>
-            <option *ngFor="let code of profitCodes" [value]="code.id" type="number">{{ code.profitId
+            <option *ngFor="let code of profitCodes" [value]="code.profitCode" type="number">{{ code.profitId
               }}-{{code.profitDescr}}</option>
           </select>
         </div>
@@ -219,7 +211,7 @@
           <select id="locationCode" name="locationCode" type="number" aria-placeholder="Select Location Code"
             formControlName="locationCode" class="form-control" (change)="updatedLocationCode">
             <option value="" disabled selected>Select a Location Code</option>
-            <option *ngFor="let code of locationCodes" [value]="code.id" type="number">{{ code.locationId
+            <option *ngFor="let code of locationCodes" [value]="code.locationCode" type="number">{{ code.locationId
               }}-{{code.regionalLocation}}</option>
           </select>
         </div>
@@ -228,13 +220,13 @@
       <div class="form-group m-2">
         <label for="projectId">ID:</label>
         <div class="input-group">
-          <input formControlName="projectId" type="text" class="form-control">
+          <input formControlName="projectId" type="text" required maxlength="8" class="form-control">
         </div>
       </div>
       <div class="form-group m-2">
         <label for="projectDescription">Description:</label>
         <div class="input-group">
-          <input formControlName="projectDescription" type="text" class="form-control">
+          <input formControlName="projectDescription" type="text" required class="form-control">
         </div>
       </div>
 
@@ -251,7 +243,7 @@
         </div>
       </div>
       <div class=" text-center m-3"> <button data-dismiss="modal" class="btn btn-outline-success"
-          (click)="onSave()">Save
+          [disabled]="!editForm.valid" (click)="onSave()">Save
           Changes</button> </div>
     </form>
   </div>

@@ -1,18 +1,13 @@
 <div class="row">
-    <div class="col-xs-10">
+    <div class="col">
         <app-city-edit></app-city-edit>
         <hr>
-        <ul fd-list>
-            <li fd-list-item class="m-3 border border-primary rounded" style="cursor: pointer" *ngFor="let record of records;"
-                (click)="onEditItem(record.id)">
-                <span class="fw-bold">ID:</span> {{ record.id}} -<span class="fw-bold">Code:</span> {{ record.locationId}} 
-                - <span class="fw-bold">Description:</span> {{
-                record.regionalLocation }}
-            </li>
-        </ul>
-            <!-- <li fd-list-item [noData]="true" *ngIf="!displayedItems || displayedItems.length === 0">
-                <span fd-list-title> No results found! </span>
-            </li> -->
-        
+        <ul class="list-group">
+            <a class="list-group-item" style="cursor: pointer" *ngFor="let record of records; "
+                (click)="onEditItem(record.locationCode)">
+                <span class="fw-bold">ID:</span> {{ record.locationCode}} - <span class="fw-bold">Code:</span> {{ record.locationId}} - <span class="fw-bold"> Description:</span> {{ record.regionalLocation }}
+            </a>
+        </ul> 
     </div>
 </div>
+<ng-http-loader></ng-http-loader>

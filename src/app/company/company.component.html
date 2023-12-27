@@ -1,15 +1,14 @@
 <div class="row">
-    <div class="col-xs-10">
-      <app-company-edit></app-company-edit>
+    <div class="col">
+        <app-company-edit></app-company-edit>
         <hr>
-        <ul fd-list>
-            <li fd-list-item class="m-3 border border-primary rounded" style="cursor: pointer" *ngFor="let record of records;"
-                (click)="onEditItem(record.id)">
-                <span class="fw-bold">ID:</span> {{ record.id}} -<span class="fw-bold">Code:</span> {{ record.companyCodeId}} 
-                - <span class="fw-bold">Description:</span> {{
-                record.companyCodeDescription }}
-            </li>
+        <ul class="list-group">
+            <a class="list-group-item" style="cursor: pointer" *ngFor="let record of records; "
+                (click)="onEditItem(record.companyCode)">
+                <span class="fw-bold">ID:</span> {{ record.companyCode}} - <span class="fw-bold">Code:</span> {{
+                record.companyCodeId}} - <span class="fw-bold"> Description:</span> {{ record.companyCodeDescription }}
+            </a>
         </ul>
     </div>
 </div>
-
+<ng-http-loader></ng-http-loader>

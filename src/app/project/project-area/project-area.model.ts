@@ -1,10 +1,8 @@
 export class ProjectArea{
-   // public projectAreaCode:number;
-    public code:string;
+    public projectArea:string;
     public description:string;    
-    constructor(code:string,desc:string){
-       // this.projectAreaCode=projectAreaCode;
-        this.code=code;
+    constructor(projectArea:string,desc:string){
+        this.projectArea=projectArea;
         this.description=desc;
         
     }

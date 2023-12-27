@@ -1,189 +1,210 @@
 <fd-toolbar aria-label="With Toolbar" fdType="transparent" [clearBorder]="true">
   <h4 fd-title>Area Details</h4>
   <fd-toolbar-spacer></fd-toolbar-spacer>
-  <button
-      fd-toolbar-item
-      fd-button
-      label="New Item"
-      (click)="open(content)"
-      fdType="transparent"
-      glyph="add"
-  ></button>
+  <button fd-toolbar-item fd-button label="New Area" (click)="open(content)" class="btn btn-success"
+    glyph="add"></button>
 </fd-toolbar>
-
 
 
 <table fd-table class="table  table-striped table-hover">
   <thead fd-table-header>
-      <tr fd-table-row>
-                    <th fd-table-cell>Code</th>
-                    <th fd-table-cell>Area Master</th>
-                    <th fd-table-cell>Description</th>
-                    <th fd-table-cell>Actions</th>
-                </tr>
-            </thead>
-            <tbody fd-table-body>
-                <tr *ngFor="let area of areas" fd-table-row>
-                    <td fd-table-cell><span>{{area.areaCode}}</span></td>
-                    <td fd-table-cell><span>{{area.areaMaster}}</span></td>
-                    <td fd-table-cell><span>{{area.description}}</span></td>
-                    <td fd-table-cell>
-                        <button class="btn btn-sm btn-info m-1" (click)="openDetails(contentDetails, area)">
-                            <i class="fa fa-search"></i>Details</button>
-                        <button class="btn btn-sm btn-warning m-1" (click)="openEdit(contentEdit, area)">
-                            <i class="fa fa-edit"></i>Edit</button>
-                        <button class="btn btn-sm btn-danger m-1" (click)="openDelete(contentDelete, area)">
-                            <i class="fa fa-remove"></i>Delete</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-
+    <tr fd-table-row>
+      <th fd-table-cell>ID</th>
+      <th fd-table-cell>Area Master</th>
+      <th fd-table-cell>Description</th>
+      <th fd-table-cell>Actions</th>
+    </tr>
+  </thead>
+  <tbody fd-table-body>
+    <tr *ngFor="let area of records" fd-table-row>
+      <td fd-table-cell><span>{{area.areaCode}}</span></td>
+      <td fd-table-cell><span>{{area.areaMaster}}</span></td>
+      <td fd-table-cell><span>{{area.description}}</span></td>
+      <td fd-table-cell>
+        <button class="btn btn-sm btn-info m-1" (click)="openDetails(contentDetails, area)">
+          <i class="fa fa-search"></i>Details</button>
+        <button class="btn btn-sm btn-warning m-1" (click)="openEdit(contentEdit, area)">
+          <i class="fa fa-edit"></i>Edit</button>
+        <button class="btn btn-sm btn-danger m-1" (click)="openDelete(contentDelete, area)">
+          <i class="fa fa-remove"></i>Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- Add New Modal -->
-<ng-template #content let-modal> 
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">New area </h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form #f="ngForm" (ngSubmit)="onSubmit(f)">
-        <div class="form-group">
-          <label for="areaCode">Code:</label>
-          <div class="input-group">
-            <input id="areaCode" name="areaCode" type="number" required class="form-control" ngModel>
-          </div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">New Area </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <div class="form-group">
+        <label for="projectAreaCode">ProjectAreaCode:</label>
+        <div class="input-group" aria-placeholder="Select Project Area Code">
+          <select id="projectAreaCode" name="projectAreaCode" type="number"
+            aria-placeholder="Select projectAreaCode Code" [(ngModel)]="selectedProjectAreaCode" class="form-control">
+            <option value="" disabled selected>Select a Project Area Code</option>
+            <option *ngFor="let code of projectAreaCodes" [value]="code.projectAreaCode" type="number">{{
+              code.projectArea
+              }}-{{code.description}}</option>
+          </select>
         </div>
-        <div class="form-group">
-          <label for="areaMaster">Area Master :</label>
-          <div class="input-group">
-            <input id="areaMaster" name="areaMaster" type="text" required class="form-control" ngModel>
-          </div>
+      </div>
+      <div class="form-group">
+        <label for="buildingAreaCode">BuildingAreaCode:</label>
+        <div class="input-group" aria-placeholder="Select Building Area Code">
+          <select id="buildingAreaCode" name="buildingAreaCode" type="number"
+            aria-placeholder="Select buildingAreaCode Code" [(ngModel)]="selectedBuildingAreaCode" class="form-control">
+            <option value="" disabled selected>Select a Building Area Code</option>
+            <option *ngFor="let code of buildingAreaCodes" [value]="code.buildingAreaCode" type="number">{{
+              code.buildingArea
+              }}-{{code.description}}</option>
+          </select>
         </div>
+      </div>
+      <div class="form-group">
+        <label for="unitAreaCode">UnitAreaCode:</label>
+        <div class="input-group" aria-placeholder="Select Unit Area Code">
+          <select id="unitAreaCode" name="unitAreaCode" type="number" aria-placeholder="Select unitAreaCode Code"
+            [(ngModel)]="selectedUnitAreaCode" class="form-control">
+            <option value="" disabled selected>Select a Unit Area Code</option>
+            <option *ngFor="let code of unitAreaCodes" [value]="code.unitAreaCode" type="number">{{ code.unitArea
+              }}-{{code.description}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="measurementCode">MeasureCode:</label>
+        <div class="input-group" aria-placeholder="Select Measure Code">
+          <select id="measurementCode" name="measurementCode" type="number" aria-placeholder="Select Measure Code"
+            [(ngModel)]="selectedMeasureCode" class="form-control">
+            <option value="" disabled selected>Select a Measure Code</option>
+            <option *ngFor="let code of measureCodes" [value]="code.measurementCode" type="number">{{ code.uomID
+              }}-{{code.uomDescr}}</option>
+          </select>
+        </div>
+      </div>
 
-        <div class="form-group">
-          <label for="description">Description:</label>
-          <div class="input-group">
-            <input id="description" name="description" type="text" required class="form-control" ngModel>
-          </div>
+      <div class="form-group">
+        <label for="areaMaster">Area Master :</label>
+        <div class="input-group">
+          <input id="areaMaster" name="areaMaster" type="text" required maxlength="8" class="form-control" ngModel>
         </div>
-        <div class="form-group">
-            <label for="projectFlag">Project:</label>
-            <div class="input-group">
-              <input id="projectFlag" name="projectFlag" type="checkbox" [(ngModel)]="isProjectFlagged">
-            </div> 
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <div class="input-group">
+          <input id="description" name="description" type="text" required class="form-control" ngModel>
         </div>
-          
-          <div class="form-group">
-            <label for="buildingFlag">Building:</label>
-            <div class="input-group">
-              <input id="buildingFlag" name="buildingFlag" type="checkbox"  [(ngModel)]="isBuildingFlagged">
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="unitFlag">Unit:</label>
-            <div class="input-group">
-              <input id="unitFlag" name="unitFlag" type="checkbox" [(ngModel)]="isUnitFlagged">
-            </div>
-          </div>
-        <div class="form-group">
-          <label for="unitOfMeasurement">Unit Of Measure:</label>
-          <div class="input-group">
-            <input id="unitOfMeasurement" name="unitOfMeasurement" type="number" class="form-control" ngModel>
-          </div>
+      </div>
+      <div class="form-group">
+        <label for="projectFlag">Project:</label>
+        <div class="input-group">
+          <input id="projectFlag" name="projectFlag" type="checkbox" ngModel>
         </div>
-        <div class=" text-center m-3">
-          <button data-dismiss="modal" class="btn btn-info " [disabled]="!f.valid">Add area</button>
+      </div>
+
+      <div class="form-group">
+        <label for="buildingFlag">Building:</label>
+        <div class="input-group">
+          <!-- [(ngModel)]="isBuildingFlagged" -->
+          <input id="buildingFlag" name="buildingFlag" type="checkbox" ngModel>
         </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
-    </div>
+      </div>
+
+      <div class="form-group">
+        <label for="unitFlag">Unit:</label>
+        <div class="input-group">
+          <input id="unitFlag" name="unitFlag" type="checkbox" ngModel>
+        </div>
+      </div>
+
+      <div class=" text-center m-3">
+        <button data-dismiss="modal" class="btn btn-info " [disabled]="!f.valid">Add area</button>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+  </div>
 </ng-template>
 
 <!-- Details Modal -->
 <ng-template #contentDetails let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">area Details:</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form>
-        <div class="form-group">
-            <label for="areaCode">Code:</label>
-            <div class="input-group">
-              <input id="areaCode"  class="form-control" >
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="areaMaster">Area Master:</label>
-            <div class="input-group">
-              <input id="areaMaster"  class="form-control" >
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="description">Description:</label>
-            <div class="input-group">
-              <input id="description"  class="form-control" >
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="projectFlag">Project:</label>
-            <div class="input-group">
-              <input id="projectFlag" type="checkbox" class="form-check-input" [(ngModel)]="projectFlag">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="buildingFlag">Building:</label>
-            <div class="input-group">
-              <input id="buildingFlag" type="checkbox" class="form-check-input" [(ngModel)]="buildingFlag">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="unitFlag">Unit:</label>
-            <div class="input-group">
-              <input id="unitFlag" type="checkbox" class="form-check-input" [(ngModel)]="unitFlag">
-            </div>
-          </div>
-          <!-- <div class="form-group">
-            <label for="projectFlag">Project:</label>
-            <div class="input-group">
-              <input id="projectFlag" class="form-control" >
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="buildingFlag">Building:</label>
-            <div class="input-group">
-              <input id="buildingFlag" class="form-control" >
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="unitFlag">Unit:</label>
-            <div class="input-group">
-              <input id="unitFlag" class="form-control" >
-            </div>
-          </div> -->
-          <div class="form-group">
-            <label for="unitOfMeasurement">Unit Of Measure:</label>
-            <div class="input-group">
-              <input id="unitOfMeasurement"  class="form-control" >
-            </div>
-          </div>
-       
-      </form>
-    </div>
-    <div class="modal-footer">
-  
-  
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
-    </div>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Area Details:</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="projectAreaCode">ProjectAreaCode:</label>
+        <div class="input-group">
+          <input id="projectAreaCode" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="buildingAreaCode">BuildingAreaCode:</label>
+        <div class="input-group">
+          <input id="buildingAreaCode" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="unitAreaCode">UnitAreaCode:</label>
+        <div class="input-group">
+          <input id="unitAreaCode" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="measurementCode">MeasureCode:</label>
+        <div class="input-group">
+          <input id="measurementCode" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="areaMaster">Area Master:</label>
+        <div class="input-group">
+          <input id="areaMaster" class="form-control" readonly>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <div class="input-group">
+          <input id="description" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="projectFlag">Project:</label>
+        <div class="input-group">
+          <input id="projectFlag" readonly class="form-control">
+          <!-- <input id="projectFlag" type="checkbox" readonly class="form-check-input" [(ngModel)]="projectFlag"> -->
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="buildingFlag">Building:</label>
+        <div class="input-group">
+          <input id="buildingFlag" readonly class="form-control">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="unitFlag">Unit:</label>
+        <div class="input-group">
+          <input id="unitFlag" readonly class="form-control">
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
+  </div>
 </ng-template>
 
 <!-- Edit Modal -->
@@ -196,54 +217,85 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="editForm" novalidate>
-        <div class="form-group m-2">
-            <label for="areaCode">areaCode:</label>
-            <div class="input-group">
-              <input formControlName="areaCode" type="number" class="form-control">
-            </div>
-          </div>
-          <div class="form-group m-2">
-            <label for="areaMaster">Area Master:</label>
-            <div class="input-group">
-              <input formControlName="areaMaster" type="text" class="form-control">
-            </div>
-          </div>
-          <div class="form-group m-2">
-              <label for="description">Description:</label>
-              <div class="input-group">
-                <input formControlName="description" type="text"  class="form-control">
-              </div>
-          </div>
-          <div class="form-group m-2">
-              <label for="projectFlag">Project:</label>
-              <div class="input-group">
-                <input formControlName="projectFlag"  type="checkbox" >
-              </div>
-          </div>
-
-          <div class="form-group m-2">
-            <label for="buildingFlag">Building:</label>
-            <div class="input-group">
-              <input formControlName="buildingFlag"  type="checkbox" >
-            </div>
+      <div class="form-group m-2">
+        <label for="projectAreaCode">ProjectAreaCode:</label>
+        <div class="input-group" aria-placeholder="Select Project Area Code">
+          <select id="projectAreaCode" name="projectAreaCode" type="number" aria-placeholder="Select Project Code"
+            formControlName="projectAreaCode" class="form-control" (change)="updatedProjectAreaCode">
+            <option value="" disabled selected>Select a Project Code</option>
+            <option *ngFor="let code of projectAreaCodes" [value]="code.projectAreaCode" type="number">{{
+              code.projectArea
+              }}-{{code.description}}</option>
+          </select>
         </div>
-
-        <div class="form-group m-2">
-            <label for="unitFlag">Unit:</label>
-            <div class="input-group">
-              <input formControlName="unitFlag"  type="checkbox" >
-            </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="buildingAreaCode">BuildingAreaCode:</label>
+        <div class="input-group" aria-placeholder="Select Project Area Code">
+          <select id="buildingAreaCode" name="buildingAreaCode" type="number" aria-placeholder="Select Project Code"
+            formControlName="buildingAreaCode" class="form-control" (change)="updatedBuildingAreaCode">
+            <option value="" disabled selected>Select a Building Code</option>
+            <option *ngFor="let code of buildingAreaCodes" [value]="code.buildingAreaCode" type="number">{{
+              code.buildingArea
+              }}-{{code.description}}</option>
+          </select>
         </div>
-         
-          <div class="form-group m-2">
-              <label for="unitOfMeasurement">Unit OF Measure:</label>
-              <div class="input-group">
-                <input formControlName="unitOfMeasurement" type="number"  class="form-control">
-              </div>
-          </div>
-          
-     
-          <div class=" text-center m-3"> <button data-dismiss="modal" class="btn btn-info" (click)="onSave()">Save
+      </div>
+      <div class="form-group m-2">
+        <label for="unitAreaCode">UnitAreaCode:</label>
+        <div class="input-group" aria-placeholder="Select Unit Area Code">
+          <select id="unitAreaCode" name="unitAreaCode" type="number" aria-placeholder="Select Unit Code"
+            formControlName="unitAreaCode" class="form-control" (change)="updatedUnitAreaCode">
+            <option value="" disabled selected>Select Unit Code</option>
+            <option *ngFor="let code of unitAreaCodes" [value]="code.unitAreaCode" type="number">{{ code.unitArea
+              }}-{{code.description}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="measurementCode">MeasureCode:</label>
+        <div class="input-group" aria-placeholder="Select Measure Code">
+          <select id="measurementCode" name="measurementCode" type="number" aria-placeholder="Select Measure Code"
+            formControlName="measurementCode" class="form-control" (change)="updatedMeasureCode">
+            <option value="" disabled selected>Select Unit Code</option>
+            <option *ngFor="let code of measureCodes" [value]="code.measurementCode" type="number">{{ code.uomID
+              }}-{{code.uomDescr}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="areaMaster">Area Master:</label>
+        <div class="input-group">
+          <input formControlName="areaMaster" type="text" required maxlength="8" class="form-control">
+        </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="description">Description:</label>
+        <div class="input-group">
+          <input formControlName="description" type="text" required class="form-control">
+        </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="projectFlag">Project:</label>
+        <div class="input-group">
+          <input formControlName="projectFlag" type="checkbox">
+        </div>
+      </div>
+
+      <div class="form-group m-2">
+        <label for="buildingFlag">Building:</label>
+        <div class="input-group">
+          <input formControlName="buildingFlag" type="checkbox">
+        </div>
+      </div>
+
+      <div class="form-group m-2">
+        <label for="unitFlag">Unit:</label>
+        <div class="input-group">
+          <input formControlName="unitFlag" type="checkbox">
+        </div>
+      </div>
+      <div class=" text-center m-3"> <button data-dismiss="modal" class="btn btn-info" (click)="onSave()">Save
           Changes</button> </div>
     </form>
   </div>

@@ -1,55 +1,49 @@
 import { Injectable } from '@angular/core';
-
 import { Subject } from 'rxjs';
 import { BuildingArea } from './building-area.model';
+import { ApiService } from 'src/app/ApiService.service';
 
 @Injectable()
 export class BuildingAreaService {
+
   recordsChanged = new Subject<BuildingArea[]>();
   startedEditing = new Subject<number>();
+  model:"buildingareas";
+  constructor(private apiService:ApiService ) { }
+  private recordsApi: BuildingArea[]
 
-  private records: BuildingArea[] = [
-    new BuildingArea(
-        
-      'BuildingArea 1',
-      'BuildingArea 1 Desc'),
-      new BuildingArea(
-        
-        'BuildingArea 2',
-        'BuildingArea 2 Desc'),
-        new BuildingArea(
-            
-            'BuildingArea 3',
-            'BuildingArea 3 Desc'),
-  ];
-
-
-  getRecords() {
-    return this.records.slice();
+  getApiRecords() {
+    this.apiService.get<BuildingArea[]>('buildingareas').subscribe(response => {
+      console.log(response);
+      this.recordsApi = response;
+      this.recordsChanged.next(this.recordsApi); 
+    });
   }
-
-  getRecord(index: number) {
-    return this.records[index];
+  addApiRecord(row: BuildingArea) {
+    console.log(row);
+    this.apiService.post<BuildingArea>('buildingareas', row).subscribe((response: BuildingArea) => {
+      console.log('BuildingArea created:', response);
+      this.getApiRecords();
+    });
+    
+    //return this.apiService.post<BuildingArea>('buildingareas', row);
   }
- 
-
-  addRecord(BuildingArea: BuildingArea) {
-    this.records.push(BuildingArea);
-    this.recordsChanged.next(this.records.slice());
+  updateApiRecord(id:number,row: any) {
+    console.log(this.apiService.put<BuildingArea>(`buildingareas`,id, row));
+   this.apiService.put<BuildingArea>('buildingareas',id,row).subscribe(response => {
+    console.log(response);
+   this.getApiRecords()
+  });
   }
-
-  addrecords(records: BuildingArea[]) {
-    this.records.push(...records);
-    this.recordsChanged.next(this.records.slice());
+  getApiRecord(index:number) {
+   return this.apiService.getID<BuildingArea>('buildingareas',index)
   }
-  updateRecord(index: number, newBuildingArea: BuildingArea) {
-    this.records[index] = newBuildingArea;
-    this.recordsChanged.next(this.records.slice());
+  deleteApiRecord(id:number) {
+    console.log(this.apiService.delete<BuildingArea>(`buildingareas`,id));
+    this.apiService.delete<BuildingArea>(`buildingareas`,id).subscribe(response =>{
+      console.log(response);
+      this.getApiRecords();
+    })
+    
   }
-
-  deleteRecord(index: number) {
-    this.records.splice(index, 1);
-    this.recordsChanged.next(this.records.slice());
-  }
-
 }

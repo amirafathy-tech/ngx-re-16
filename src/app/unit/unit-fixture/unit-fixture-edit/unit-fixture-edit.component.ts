@@ -7,7 +7,7 @@ import { UnitFixtureService } from '../unit-fixture.service';
 @Component({
   selector: 'app-unit-fixture-edit',
   templateUrl: './unit-fixture-edit.component.html',
- // styleUrl: './unit-fixture-edit.component.css'
+  // styleUrl: './unit-fixture-edit.component.css'
 })
 export class UnitFixtureEditComponent {
 
@@ -16,8 +16,6 @@ export class UnitFixtureEditComponent {
   editMode = false;
   editedItemIndex: number;
   editedItem: UnitFixture;
-
-
   constructor(private unitFixtureService: UnitFixtureService) { }
 
   ngOnInit() {
@@ -28,16 +26,11 @@ export class UnitFixtureEditComponent {
           this.editMode = true;
           this.unitFixtureService.getApiRecord(index)
             .subscribe((record: UnitFixture) => {
-              console.log(record);
-              this.editedItem.uFixtureId=record.uFixtureId;
-              this.editedItem.uFixtureDescr=record.uFixtureDescr;
-              console.log(this.editedItem);
-              
               this.editedItem = record;
               console.log(this.editedItem);
               this.slForm.setValue({
-                uFixtureId: this.editedItem.uFixtureId,
-                uFixtureDescr: this.editedItem.uFixtureDescr
+                fixtureId: this.editedItem.fixtureId,
+                fixtureDescr: this.editedItem.fixtureDescr
               });
             });
         });
@@ -45,11 +38,11 @@ export class UnitFixtureEditComponent {
 
   onSubmitApi(form: NgForm) {
     const value = form.value;
-    const newRecord = new UnitFixture(value.uFixtureId, value.uFixtureDescr);
+    const newRecord = new UnitFixture(value.fixtureId, value.fixtureDescr);
     console.log(newRecord);
 
     if (this.editMode) {
-      const updatedRecord = { unitFixtureCode: this.editedItemIndex, uFixtureId: value.uFixtureId, uFixtureDescr: value.uFixtureDescr };
+      const updatedRecord = { unitFixtureCode: this.editedItemIndex, fixtureId: value.fixtureId, fixtureDescr: value.fixtureDescr };
       console.log(updatedRecord);
 
       this.unitFixtureService.updateApiRecord(this.editedItemIndex, updatedRecord);
@@ -67,6 +60,8 @@ export class UnitFixtureEditComponent {
   }
 
   onDelete() {
+    console.log(this.editedItemIndex);
+
     this.unitFixtureService.deleteApiRecord(this.editedItemIndex);
     this.onClear();
   }

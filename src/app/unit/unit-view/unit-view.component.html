@@ -2,12 +2,12 @@
     <div class="col-xs-10">
         <app-unit-view-edit></app-unit-view-edit>
         <hr>
-        <ul fd-list>
-            <li fd-list-item class="m-3 border border-primary rounded" style="cursor: pointer" *ngFor="let record of records; let i = index"
-                (click)="onEditItem(i)">
-                <span class="fw-bold">Code:</span> {{ record.code}} - <span class="fw-bold">Description:</span> {{
-                record.description }}
-            </li>
+        <ul class="list-group">
+            <a class="list-group-item" style="cursor: pointer" *ngFor="let record of records; "
+                (click)="onEditItem(record.unitViewCode)">
+                <span class="fw-bold">ID:</span> {{ record.unitViewCode}} - <span class="fw-bold">Code:</span> {{
+                record.viewId}} - <span class="fw-bold"> Description:</span> {{ record.viewDescr }}
+            </a>
         </ul>
     </div>
 </div>

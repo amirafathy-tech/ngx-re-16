@@ -4,8 +4,8 @@
         <hr>
         <ul class="list-group">
             <a class="list-group-item" style="cursor: pointer" *ngFor="let record of records; "
-                (click)="onEditItem(record.id)">
-                <span class="fw-bold">ID:</span> {{ record.id}} - <span class="fw-bold">Code:</span> {{ record.ufloorId}} - <span class="fw-bold"> Description:</span> {{ record.ufloorDescr }}
+                (click)="onEditItem(record.unitFloorCode)">
+                <span class="fw-bold">ID:</span> {{ record.unitFloorCode}} - <span class="fw-bold">Code:</span> {{ record.floorId}} - <span class="fw-bold"> Description:</span> {{ record.floorDescr }}
             </a>
         </ul>
     </div>

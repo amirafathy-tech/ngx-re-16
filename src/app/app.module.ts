@@ -59,12 +59,11 @@ import { AreaComponent } from './area/area.component';
 import { AreaListComponent } from './area/area-list/area-list.component';
 import { PaymentComponent } from './payment/payment.component';
 import { ShellbarSidebarComponent } from './shellbar/shellbar.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { BarComponent } from './bar/bar.component';
-import { SubnavComponent } from './subnav/subnav.component';
 import { CommonModule } from '@angular/common';
-
-
+import { NgHttpLoaderModule } from 'ng-http-loader';
+import { ModelComponent } from './model/model.component';
+import { AboutComponent } from './about/about.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -118,14 +117,13 @@ import { CommonModule } from '@angular/common';
     AreaComponent,
     AreaListComponent,
     PaymentComponent,
+    ModelComponent,
     ShellbarSidebarComponent,
-    NavbarComponent,
-    BarComponent,
-    SubnavComponent 
+    AboutComponent,
+    FooterComponent
   ],
 
   imports: [
-    
     FundamentalNgxCoreModule,
     BrowserModule,
     AppRoutingModule,
@@ -135,12 +133,9 @@ import { CommonModule } from '@angular/common';
     ReactiveFormsModule,
     SharedModule,
     HttpClientModule,
-    CommonModule
-    
-    
-   
+    CommonModule,
+    NgHttpLoaderModule.forRoot(),
   ],
- 
   providers: [
     provideClientHydration()
   ],

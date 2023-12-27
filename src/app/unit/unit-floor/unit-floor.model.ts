@@ -1,9 +1,9 @@
 export class UnitFloor{
-    public ufloorId:string;
-    public ufloorDescr:string;    
-    constructor(ufloorId:string,ufloorDescr:string){
-        this.ufloorId=ufloorId;
-        this.ufloorDescr=ufloorDescr;
+    public floorId:string;
+    public floorDescr:string;    
+    constructor(floorId:string,floorDescr:string){
+        this.floorId=floorId;
+        this.floorDescr=floorDescr;
         
     }
 }

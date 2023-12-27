@@ -1,9 +1,9 @@
 export class UnitOrientation{
-    public code:string;
-    public description:string;    
-    constructor(code:string,desc:string){
-        this.code=code;
-        this.description=desc;
+    public orientationId:string;
+    public orientationDescr:string;    
+    constructor(orientationId:string,orientationDescr:string){
+        this.orientationId=orientationId;
+        this.orientationDescr=orientationDescr;
         
     }
     

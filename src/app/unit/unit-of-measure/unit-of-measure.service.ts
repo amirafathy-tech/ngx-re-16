@@ -2,51 +2,48 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { UnitOfMeasure } from './unit-of-measure.model';
+import { ApiService } from 'src/app/ApiService.service';
 
 @Injectable()
 export class UnitOfMeasureService {
   recordsChanged = new Subject<UnitOfMeasure[]>();
   startedEditing = new Subject<number>();
+  model:"measurements";
+  constructor(private apiService:ApiService ) { }
+  private recordsApi: UnitOfMeasure[]
 
-  private records: UnitOfMeasure[] = [
-    new UnitOfMeasure(
-      'UnitOfMeasure 1',
-      'UnitOfMeasure 1 Desc'),
-      new UnitOfMeasure(
-        'UnitOfMeasure 2',
-        'UnitOfMeasure 2 Desc'),
-        new UnitOfMeasure(
-            'UnitOfMeasure 3',
-            'UnitOfMeasure 3 Desc'),
-  ];
-
-
-  getRecords() {
-    return this.records.slice();
+  getApiRecords() {
+    this.apiService.get<UnitOfMeasure[]>('measurements').subscribe(response => {
+      console.log(response);
+      this.recordsApi = response;
+      this.recordsChanged.next(this.recordsApi); 
+    });
   }
-
-  getRecord(index: number) {
-    return this.records[index];
+  addApiRecord(row: UnitOfMeasure) {
+    this.apiService.post<UnitOfMeasure>('measurements', row).subscribe((response: UnitOfMeasure) => {
+      console.log('UnitFloor created:', response);
+      this.getApiRecords();
+    });
+    
+    return this.apiService.post<UnitOfMeasure>('measurements', row);
   }
- 
-
-  addRecord(UnitOfMeasure: UnitOfMeasure) {
-    this.records.push(UnitOfMeasure);
-    this.recordsChanged.next(this.records.slice());
+  updateApiRecord(id:number,row: any) {
+    console.log(this.apiService.put<UnitOfMeasure>(`measurements`,id, row));
+   this.apiService.put<UnitOfMeasure>('measurements',id,row).subscribe(response => {
+    console.log(response);
+   this.getApiRecords()
+  });
   }
-
-  addrecords(records: UnitOfMeasure[]) {
-    this.records.push(...records);
-    this.recordsChanged.next(this.records.slice());
+  getApiRecord(index:number) {
+   return this.apiService.getID<UnitOfMeasure>('measurements',index)
   }
-  updateRecord(index: number, newUnitOfMeasure: UnitOfMeasure) {
-    this.records[index] = newUnitOfMeasure;
-    this.recordsChanged.next(this.records.slice());
-  }
-
-  deleteRecord(index: number) {
-    this.records.splice(index, 1);
-    this.recordsChanged.next(this.records.slice());
+  deleteApiRecord(id:number) {
+    console.log(this.apiService.delete<UnitOfMeasure>(`measurements`,id));
+    this.apiService.delete<UnitOfMeasure>(`measurements`,id).subscribe(response =>{
+      console.log(response);
+      this.getApiRecords();
+    })
+    
   }
 
 }

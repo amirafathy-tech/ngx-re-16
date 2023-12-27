@@ -35,9 +35,6 @@ export class ProjectListComponent implements OnInit {
   selectedCompanyCode: number;
   selectedProfitCode: number;
   selectedLocationCode: number;
-  updatedCompanyCode: number;
-  updatedProfitCode: number;
-  updatedLocationCode: number;
 
   constructor(private projectService: ProjectService, private companyService: CompanyService, private profitService: ProfitService, private cityService: CityService, private apiService: ApiService, private modalService: NgbModal, private fb: FormBuilder) {
   }
@@ -84,15 +81,16 @@ export class ProjectListComponent implements OnInit {
     console.log(this.selectedCompanyCode);
     console.log(parseInt(this.selectedCompanyCode.toString(), 10));
     const newRecord = new Project(
-    value.projectId,value.projectDescription, value.validFrom, value.profit,parseInt(this.selectedCompanyCode.toString(), 10),
-    parseInt(this.selectedProfitCode.toString(), 10), parseInt(this.selectedLocationCode.toString(), 10));
+      value.projectId, value.projectDescription, value.validFrom, value.profit,
+      parseInt(this.selectedCompanyCode.toString(), 10),
+      parseInt(this.selectedProfitCode.toString(), 10),
+      parseInt(this.selectedLocationCode.toString(), 10));
     console.log(newRecord);
     this.projectService.addApiRecord(newRecord);
     console.log(this.projectService.addApiRecord(newRecord));
     this.ngOnInit(); //reload the table
     this.modalService.dismissAll();
   }
-
 
   openDetails(targetModal, project: Project) {
     this.modalService.open(targetModal, {
@@ -108,7 +106,6 @@ export class ProjectListComponent implements OnInit {
     document.getElementById('validFrom').setAttribute('value', String(project.validFrom));
     document.getElementById('profit').setAttribute('value', String(project.profit));
   }
- 
 
   openEdit(targetModal, project: Project) {
     this.modalService.open(targetModal, {
@@ -116,43 +113,44 @@ export class ProjectListComponent implements OnInit {
       size: 'lg'
     });
     console.log(project);
-    this.editedItemIndex=project.id;
+    console.log(project.projectCode);
+    this.editedItemIndex = project.projectCode;
     console.log(this.editedItemIndex);
-    
+
     this.editForm.patchValue({
-      companyCode:Number(this.updatedCompanyCode),
-      profitCode:Number(this.updatedProfitCode),
-      locationCode:Number(this.updatedLocationCode),
+      companyCode: Number(project.companyCode),
+      profitCode: Number(project.profitCode),
+      locationCode: Number(project.locationCode),
       projectId: project.projectId,
       projectDescription: project.projectDescription,
       validFrom: project.validFrom,
       profit: project.profit
     });
-    
+
   }
   onSave() {// for edit 
     console.log(this.editForm.value);
     const convertedCompanyCode = Number(this.editForm.value.companyCode);
     const convertedProfitCode = Number(this.editForm.value.profitCode);
     const convertedLocationCode = Number(this.editForm.value.locationCode);
-    console.log(this.updatedCompanyCode);
+    // console.log(this.updatedCompanyCode);
     console.log(this.editForm.value.companyCode);
     console.log(convertedCompanyCode);
     this.editForm.patchValue({
       companyCode: convertedCompanyCode,
-      profitCode:convertedProfitCode,
-      locationCode:convertedLocationCode
+      profitCode: convertedProfitCode,
+      locationCode: convertedLocationCode
     });
     console.log(this.editForm.value);
+    console.log(this.editedItemIndex);
     this.projectService.updateApiRecord(this.editedItemIndex, this.editForm.value);
     this.ngOnInit();
     this.modalService.dismissAll();
   }
 
   openDelete(targetModal, project: Project) {
-    this.deleteId = project.id;
+    this.deleteId = project.projectCode;
     console.log(this.deleteId);
-    
     this.modalService.open(targetModal, {
       backdrop: 'static',
       size: 'lg'
@@ -167,7 +165,6 @@ export class ProjectListComponent implements OnInit {
   }
   onClear() {
     this.slForm.reset();
-    //this.editMode = false;
   }
   // for add modal
   open(content) {
@@ -186,7 +183,6 @@ export class ProjectListComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-
 }
 
 

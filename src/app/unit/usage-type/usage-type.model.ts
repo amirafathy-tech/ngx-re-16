@@ -1,9 +1,9 @@
 export class UsageType{
-    public code:string;
-    public description:string;    
-    constructor(code:string,desc:string){
-        this.code=code;
-        this.description=desc;
+    public usageId:string;
+    public usageDescr:string;    
+    constructor(usageId:string,usageDescr:string){
+        this.usageId=usageId;
+        this.usageDescr=usageDescr;
         
     }
     

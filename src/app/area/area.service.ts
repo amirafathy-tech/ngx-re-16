@@ -2,64 +2,48 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { Area } from './area.model';
+import { ApiService } from '../ApiService.service';
 
 @Injectable()
 export class AreaService {
+  
   recordsChanged = new Subject<Area[]>();
   startedEditing = new Subject<number>();
+  model: "areas";
+  constructor(private apiService: ApiService) { }
+  private recordsApi: Area[]
 
-  private records: Area[] = [
-    new Area(
-        1,
-        'Area 1',
-        'Area 1 Desc',
-        true,
-        true, 
-        true,
-        1
-      ),
-      new Area(
-        2,
-        'Area 2',
-        'Area 2 Desc',
-        true,
-        true, 
-        true,
-        2
-        )];
-
-
-  getRecords() {
-   // console.log(this.records.slice());
-    return this.records.slice();
+  getApiRecords() {
+    this.apiService.get<Area[]>('areas').subscribe(response => {
+      console.log(response);
+      this.recordsApi = response;
+      this.recordsChanged.next(this.recordsApi);
+    });
   }
+  addApiRecord(row: Area) {
+    this.apiService.post<Area>('areas', row).subscribe((response: Area) => {
+      console.log('Area created:', response);
+      this.getApiRecords();
+    });
 
-  getRecord(index: number) {
-    return this.records[index];
+    //return this.apiService.post<Building>('areas', row);
   }
- 
+  updateApiRecord(id: number, row: any) {
+    console.log(this.apiService.put<Area>(`areas`, id, row));
+    this.apiService.put<Area>('areas', id, row).subscribe(response => {
+      console.log(response);
+      this.getApiRecords()
+    });
+  }
+  getApiRecord(index: number) {
+    return this.apiService.getID<Area>('areas', index)
+  }
+  deleteApiRecord(id: number) {
+    console.log(this.apiService.delete<Area>(`areas`, id));
+    this.apiService.delete<Area>(`areas`, id).subscribe(response => {
+      console.log(response);
+      this.getApiRecords();
+    })
 
-  addRecord(Area: Area) {
-    this.records.push(Area);
-    //console.log(this.records);
-    this.recordsChanged.next(this.records.slice());
   }
-
-  addrecords(records: Area[]) {
-    this.records.push(...records);
-    this.recordsChanged.next(this.records.slice());
-  }
-  updateRecord(index: number, newArea: Area) {
-    this.records[index] = newArea;
-    console.log(this.records)
-    this.recordsChanged.next(this.records.slice());
-  }
-
-  deleteRecord(index: number) {
-    this.records.splice(index, 1);
-    console.log(this.records);
-    this.recordsChanged.next(this.records.slice());
-    console.log(this.recordsChanged);
-  }
-
 }

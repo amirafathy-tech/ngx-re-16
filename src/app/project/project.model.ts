@@ -1,6 +1,6 @@
 import { LocalDate } from 'js-joda';
 export class Project {
-    public id:number;
+    public projectCode:number;
     public companyCode: number;
     public profitCode: number;
     public locationCode: number;

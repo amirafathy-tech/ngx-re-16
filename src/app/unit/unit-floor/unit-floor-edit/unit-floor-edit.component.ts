@@ -16,8 +16,6 @@ export class UnitFloorEditComponent {
   editMode = false;
   editedItemIndex: number;
   editedItem: UnitFloor;
-
-
   constructor(private unitFloorService: UnitFloorService) { }
 
   ngOnInit() {
@@ -32,8 +30,8 @@ export class UnitFloorEditComponent {
               console.log(this.editedItem);
 
               this.slForm.setValue({
-                ufloorId: this.editedItem.ufloorId,
-                ufloorDescr: this.editedItem.ufloorDescr
+                floorId: this.editedItem.floorId,
+                floorDescr: this.editedItem.floorDescr
               });
             });
         });
@@ -41,11 +39,11 @@ export class UnitFloorEditComponent {
 
   onSubmitApi(form: NgForm) {
     const value = form.value;
-    const newRecord = new UnitFloor(value.ufloorId, value.ufloorDescr);
+    const newRecord = new UnitFloor(value.floorId, value.floorDescr);
     console.log(newRecord);
 
     if (this.editMode) {
-      const updatedRecord = { ufloorCode: this.editedItemIndex, ufloorId: value.ufloorId, ufloorDescr: value.ufloorDescr };
+      const updatedRecord = { unitFloorCode: this.editedItemIndex, floorId: value.floorId, floorDescr: value.floorDescr };
       console.log(updatedRecord);
 
       this.unitFloorService.updateApiRecord(this.editedItemIndex, updatedRecord);

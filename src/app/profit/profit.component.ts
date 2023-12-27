@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 @Component({
   selector: 'app-profit',
   templateUrl: './profit.component.html',
- // styleUrl: './profit.component.css',
+  // styleUrl: './profit.component.css',
   providers: [ProfitService]
 })
 export class ProfitComponent {
@@ -16,11 +16,11 @@ export class ProfitComponent {
   constructor(private profitService: ProfitService) { }
 
   ngOnInit() {
-   this.profitService.getApiRecords();
-   this.subscription =this.profitService.recordsChanged.subscribe((records: Profit[]) => {
-     this.records = records;
-     console.log(this.records);
-   });
+    this.profitService.getApiRecords();
+    this.subscription = this.profitService.recordsChanged.subscribe((records: Profit[]) => {
+      this.records = records;
+      console.log(this.records);
+    });
   }
   onEditItem(index: number) {
     this.profitService.startedEditing.next(index);

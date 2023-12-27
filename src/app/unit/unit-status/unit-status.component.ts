@@ -10,24 +10,21 @@ import { UnitStatus } from './unit-status.model';
   providers: [UnitStatusService]
 })
 export class UnitStatusComponent {
-  
+
   records: UnitStatus[];
   private subscription: Subscription;
   constructor(private unitStatusService: UnitStatusService) { }
 
   ngOnInit() {
-    this.records = this.unitStatusService.getRecords();
-    this.subscription = this.unitStatusService.recordsChanged
-      .subscribe(
-        (records: UnitStatus[]) => {
-          this.records = records;
-        }
-      );
+    this.unitStatusService.getApiRecords();
+    this.subscription = this.unitStatusService.recordsChanged.subscribe((records: UnitStatus[]) => {
+      this.records = records;
+      console.log(this.records);
+    });
   }
   onEditItem(index: number) {
     this.unitStatusService.startedEditing.next(index);
   }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

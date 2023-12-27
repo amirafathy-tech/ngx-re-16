@@ -14,21 +14,19 @@ export class UnitSubTypeComponent {
   records: UnitSubType[];
   private subscription: Subscription;
   constructor(private unitSubTypeService: UnitSubTypeService) { }
-
+ 
   ngOnInit() {
-    this.records = this.unitSubTypeService.getRecords();
-    this.subscription = this.unitSubTypeService.recordsChanged
-      .subscribe(
-        (records: UnitSubType[]) => {
-          this.records = records;
-        }
-      );
+   this.unitSubTypeService.getApiRecords();
+   this.subscription =this.unitSubTypeService.recordsChanged.subscribe((records: UnitSubType[]) => {
+     this.records = records;
+     console.log(this.records);
+   });
   }
   onEditItem(index: number) {
     this.unitSubTypeService.startedEditing.next(index);
   }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
+ 
 }

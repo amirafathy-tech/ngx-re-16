@@ -17,6 +17,7 @@ export class BuildingAreaEditComponent {
   editedItemIndex: number;
   editedItem: BuildingArea;
 
+
   constructor(private buildingAreaService: BuildingAreaService) { }
 
   ngOnInit() {
@@ -25,25 +26,35 @@ export class BuildingAreaEditComponent {
         (index: number) => {
           this.editedItemIndex = index;
           this.editMode = true;
-          this.editedItem = this.buildingAreaService.getRecord(index);
-          this.slForm.setValue({
-            code: this.editedItem.code,
-            description: this.editedItem.description
-          })
-        }
-      );
+          this.buildingAreaService.getApiRecord(index)
+            .subscribe((record: BuildingArea) => {
+              this.editedItem = record;
+              console.log(this.editedItem);
+
+              this.slForm.setValue({
+                buildingArea: this.editedItem.buildingArea,
+                description: this.editedItem.description
+              });
+            });
+        });
   }
 
-  onSubmit(form: NgForm) {
+  onSubmitApi(form: NgForm) {
     const value = form.value;
-    const newRecord = new BuildingArea(value.code, value.description);
+    const newRecord = new BuildingArea(value.buildingArea, value.description);
+    console.log(newRecord);
+
     if (this.editMode) {
-      this.buildingAreaService.updateRecord(this.editedItemIndex, newRecord);
+      const updatedRecord = { buildingAreaCode: this.editedItemIndex, buildingArea: value.buildingArea, description: value.description };
+      console.log(updatedRecord);
+
+      this.buildingAreaService.updateApiRecord(this.editedItemIndex, updatedRecord);
     } else {
-      this.buildingAreaService.addRecord(newRecord);
+      this.buildingAreaService.addApiRecord(newRecord)
     }
     this.editMode = false;
     form.reset();
+
   }
 
   onClear() {
@@ -52,7 +63,7 @@ export class BuildingAreaEditComponent {
   }
 
   onDelete() {
-    this.buildingAreaService.deleteRecord(this.editedItemIndex);
+    this.buildingAreaService.deleteApiRecord(this.editedItemIndex);
     this.onClear();
   }
 

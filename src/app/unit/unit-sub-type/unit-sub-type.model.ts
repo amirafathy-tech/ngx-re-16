@@ -1,9 +1,9 @@
 export class UnitSubType{
-    public code:string;
-    public description:string;    
-    constructor(code:string,desc:string){
-        this.code=code;
-        this.description=desc;
+    public subtypeId:string;
+    public subtypeDescr:string;    
+    constructor(subtypeId:string,subtypeDescr:string){
+        this.subtypeId=subtypeId;
+        this.subtypeDescr=subtypeDescr;
         
     }
     

@@ -2,51 +2,48 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { UnitStatus } from './unit-status.model';
+import { ApiService } from 'src/app/ApiService.service';
 
 @Injectable()
 export class UnitStatusService {
   recordsChanged = new Subject<UnitStatus[]>();
   startedEditing = new Subject<number>();
+  model:"unitstatuses";
+  constructor(private apiService:ApiService ) { }
+  private recordsApi: UnitStatus[]
 
-  private records: UnitStatus[] = [
-    new UnitStatus(
-      'UnitStatus 1',
-      'UnitStatus 1 Desc'),
-      new UnitStatus(
-        'UnitStatus 2',
-        'UnitStatus 2 Desc'),
-        new UnitStatus(
-            'UnitStatus 3',
-            'UnitStatus 3 Desc'),
-  ];
-
-
-  getRecords() {
-    return this.records.slice();
+  getApiRecords() {
+    this.apiService.get<UnitStatus[]>('unitstatuses').subscribe(response => {
+      console.log(response);
+      this.recordsApi = response;
+      this.recordsChanged.next(this.recordsApi); 
+    });
   }
-
-  getRecord(index: number) {
-    return this.records[index];
+  addApiRecord(row: UnitStatus) {
+    this.apiService.post<UnitStatus>('unitstatuses', row).subscribe((response: UnitStatus) => {
+      console.log('UnitStatus created:', response);
+      this.getApiRecords();
+    });
+    
+    return this.apiService.post<UnitStatus>('unitstatuses', row);
   }
- 
-
-  addRecord(UnitStatus: UnitStatus) {
-    this.records.push(UnitStatus);
-    this.recordsChanged.next(this.records.slice());
+  updateApiRecord(id:number,row: any) {
+    console.log(this.apiService.put<UnitStatus>(`unitstatuses`,id, row));
+   this.apiService.put<UnitStatus>('unitstatuses',id,row).subscribe(response => {
+    console.log(response);
+   this.getApiRecords()
+  });
   }
-
-  addrecords(records: UnitStatus[]) {
-    this.records.push(...records);
-    this.recordsChanged.next(this.records.slice());
+  getApiRecord(index:number) {
+   return this.apiService.getID<UnitStatus>('unitstatuses',index)
   }
-  updateRecord(index: number, newUnitStatus: UnitStatus) {
-    this.records[index] = newUnitStatus;
-    this.recordsChanged.next(this.records.slice());
-  }
-
-  deleteRecord(index: number) {
-    this.records.splice(index, 1);
-    this.recordsChanged.next(this.records.slice());
+  deleteApiRecord(id:number) {
+    console.log(this.apiService.delete<UnitStatus>(`unitstatuses`,id));
+    this.apiService.delete<UnitStatus>(`unitstatuses`,id).subscribe(response =>{
+      console.log(response);
+      this.getApiRecords();
+    })
+    
   }
 
 }

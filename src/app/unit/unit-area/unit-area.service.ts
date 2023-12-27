@@ -2,54 +2,47 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { UnitArea } from './unit-area.model';
+import { ApiService } from 'src/app/ApiService.service';
 
 @Injectable()
 export class UnitAreaService {
   recordsChanged = new Subject<UnitArea[]>();
   startedEditing = new Subject<number>();
+  model:"unitareas";
+  constructor(private apiService:ApiService ) { }
+  private recordsApi: UnitArea[]
 
-  private records: UnitArea[] = [
-    new UnitArea(
-        
-      'UnitArea 1',
-      'UnitArea 1 Desc'),
-      new UnitArea(
-        
-        'UnitArea 2',
-        'UnitArea 2 Desc'),
-        new UnitArea(
-            
-            'UnitArea 3',
-            'UnitArea 3 Desc'),
-  ];
-
-
-  getRecords() {
-    return this.records.slice();
+  getApiRecords() {
+    this.apiService.get<UnitArea[]>('unitareas').subscribe(response => {
+      console.log(response);
+      this.recordsApi = response;
+      this.recordsChanged.next(this.recordsApi); 
+    });
   }
-
-  getRecord(index: number) {
-    return this.records[index];
+  addApiRecord(row: UnitArea) {
+    this.apiService.post<UnitArea>('unitareas', row).subscribe((response: UnitArea) => {
+      console.log('UnitFloor created:', response);
+      this.getApiRecords();
+    });
+    
+    return this.apiService.post<UnitArea>('unitareas', row);
   }
- 
-
-  addRecord(UnitArea: UnitArea) {
-    this.records.push(UnitArea);
-    this.recordsChanged.next(this.records.slice());
+  updateApiRecord(id:number,row: any) {
+    console.log(this.apiService.put<UnitArea>(`unitareas`,id, row));
+   this.apiService.put<UnitArea>('unitareas',id,row).subscribe(response => {
+    console.log(response);
+   this.getApiRecords()
+  });
   }
-
-  addrecords(records: UnitArea[]) {
-    this.records.push(...records);
-    this.recordsChanged.next(this.records.slice());
+  getApiRecord(index:number) {
+   return this.apiService.getID<UnitArea>('unitareas',index)
   }
-  updateRecord(index: number, newUnitArea: UnitArea) {
-    this.records[index] = newUnitArea;
-    this.recordsChanged.next(this.records.slice());
+  deleteApiRecord(id:number) {
+    console.log(this.apiService.delete<UnitArea>(`unitareas`,id));
+    this.apiService.delete<UnitArea>(`unitareas`,id).subscribe(response =>{
+      console.log(response);
+      this.getApiRecords();
+    })
+    
   }
-
-  deleteRecord(index: number) {
-    this.records.splice(index, 1);
-    this.recordsChanged.next(this.records.slice());
-  }
-
 }

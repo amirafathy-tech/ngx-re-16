@@ -1,7 +1,7 @@
 <fd-toolbar aria-label="With Toolbar" fdType="transparent" [clearBorder]="true">
   <h4 fd-title>Building Details</h4>
   <fd-toolbar-spacer></fd-toolbar-spacer>
-  <button fd-toolbar-item fd-button label="New Item" (click)="open(content)" fdType="transparent" glyph="add"></button>
+  <button fd-toolbar-item fd-button label="New Building" (click)="open(content)" class="btn btn-success" glyph="add"></button>
 </fd-toolbar>
 
 <table fd-table>
@@ -16,7 +16,7 @@
   <tbody fd-table-body>
     <tr *ngFor="let row of records" fd-table-row>
       
-      <td fd-table-cell>{{ row.id }}</td>
+      <td fd-table-cell>{{ row.buildingCode }}</td>
       <td fd-table-cell>{{ row.buildingId }}</td>
       <td fd-table-cell>{{ row.buildingDescription }}</td>
       <td>
@@ -30,7 +30,6 @@
     </tr>
   </tbody>
 </table>
-
 
 <!-- Add New Modal -->
 <ng-template #content let-modal>
@@ -48,7 +47,7 @@
           <select id="profitCode" name="profitCode" type="number" aria-placeholder="Select Profit Code"
             [(ngModel)]="selectedProfitCode" class="form-control">
             <option value="" disabled selected>Select a Profit Code</option>
-            <option *ngFor="let code of profitCodes" [value]="code.id" type="number">{{ code.profitId
+            <option *ngFor="let code of profitCodes" [value]="code.profitCode" type="number">{{ code.profitId
               }}-{{code.profitDescr}}</option>
           </select>
         </div>
@@ -59,7 +58,7 @@
           <select id="projectCode" name="projectCode" type="number" aria-placeholder="Select Project Code"
             [(ngModel)]="selectedProjectCode" class="form-control">
             <option value="" disabled selected>Select a Project Code</option>
-            <option *ngFor="let code of projectCodes" [value]="code.id" type="number">{{ code.projectId
+            <option *ngFor="let code of projectCodes" [value]="code.projectCode" type="number">{{ code.projectId
               }}-{{code.projectDescription}}</option>
           </select>
         </div>
@@ -70,7 +69,7 @@
           <select id="buildingTypeCode" name="buildingTypeCode" type="number" aria-placeholder="Select buildingTypeCode Code"
             [(ngModel)]="selectedBuildingTypeCode" class="form-control">
             <option value="" disabled selected>Select a buildingTypeCode Code</option>
-            <option *ngFor="let code of buildingTypeCodes" [value]="code.id" type="number">{{ code.buildingTypeId
+            <option *ngFor="let code of buildingTypeCodes" [value]="code.buildingTypeCode" type="number">{{ code.buildingTypeId
               }}-{{code.buildingTypeDescr}}</option>
           </select>
         </div>
@@ -78,7 +77,7 @@
       <div class="form-group">
         <label for="buildingId">Building ID:</label>
         <div class="input-group">
-          <input id="buildingId" name="buildingId" type="text" required class="form-control" ngModel>
+          <input id="buildingId" name="buildingId" type="text" required maxlength="8" class="form-control" ngModel>
         </div>
       </div>
 
@@ -103,7 +102,7 @@
       <div class="form-group">
         <label for="numberOfFloors">NumberOfFloors:</label>
         <div class="input-group">
-          <input id="numberOfFloors" name="numberOfFloors" type="number"  class="form-control" ngModel>
+          <input id="numberOfFloors" name="numberOfFloors" type="number"  pattern="^[1-9]+[0-9]*$" class="form-control" ngModel>
         </div>
       </div>
       <div class="form-group">
@@ -112,7 +111,6 @@
           <input id="profit" name="profit" type="text" class="form-control" ngModel>
         </div>
       </div>
-
 
       <div class=" text-center m-3">
         <button data-dismiss="modal" class="btn btn-info " [disabled]="!f.valid">Add Building</button>
@@ -135,48 +133,65 @@
   <div class="modal-body">
     <form>
       <div class="form-group">
-        <label for="buildingCode">Code:</label>
+        <label for="profitCode">ProfitCode:</label>
         <div class="input-group">
-          <input id="buildingCode" class="form-control">
+          <input id="profitCode" class="form-control" readonly>
         </div>
       </div>
       <div class="form-group">
+        <label for="projectCode">ProjectCode:</label>
+        <div class="input-group">
+          <input id="projectCode" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="buildingTypeCode">BuildingTypeCode:</label>
+        <div class="input-group">
+          <input id="buildingTypeCode" class="form-control" readonly>
+        </div>
+      </div>
+      
+      <div class="form-group">
         <label for="buildingId">Building ID:</label>
         <div class="input-group">
-          <input id="buildingId" class="form-control">
+          <input id="buildingId" class="form-control" readonly>
         </div>
       </div>
 
       <div class="form-group">
         <label for="buildingDescription">Description:</label>
         <div class="input-group">
-          <input id="buildingDescription" class="form-control">
+          <input id="buildingDescription" class="form-control" readonly>
         </div>
       </div>
       <div class="form-group">
         <label for="oldNumber">OldNumber:</label>
         <div class="input-group">
-          <input id="oldNumber" class="form-control">
+          <input id="oldNumber" class="form-control" readonly>
         </div>
       </div>
       <div class="form-group">
         <label for="validFrom">Valid Date:</label>
         <div class="input-group">
-          <input id="validFrom" class="form-control">
+          <input id="validFrom" class="form-control" readonly>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="numberOfFloors">NumberOfFloors</label>
+        <div class="input-group">
+          <input id="numberOfFloors" class="form-control" readonly>
         </div>
       </div>
       <div class="form-group">
         <label for="profit">Profit:</label>
         <div class="input-group">
-          <input id="profit" class="form-control">
+          <input id="profit" class="form-control" readonly>
         </div>
       </div>
 
     </form>
   </div>
   <div class="modal-footer">
-
-
     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Cancel</button>
   </div>
 </ng-template>
@@ -192,27 +207,54 @@
   <div class="modal-body">
     <form [formGroup]="editForm" novalidate>
       <div class="form-group m-2">
-        <label for="buildingCode">BuildingCode:</label>
-        <div class="input-group">
-          <input formControlName="buildingCode" type="number" class="form-control">
+        <label for="profitCode">ProfitCode:</label>
+        <div class="input-group" aria-placeholder="Select Profit Code">
+          <select id="profitCode" name="profitCode" type="number" aria-placeholder="Select Profit Code"
+            formControlName="profitCode" class="form-control" (change)="updatedProfitCode">
+            <option value="" disabled selected>Select a Profit Code</option>
+            <option *ngFor="let code of profitCodes" [value]="code.profitCode" type="number">{{ code.profitId
+              }}-{{code.profitDescr}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="projectCode">ProjectCode:</label>
+        <div class="input-group" aria-placeholder="Select Project Code">
+          <select id="projectCode" name="projectCode" type="number" aria-placeholder="Select Project Code"
+            formControlName="projectCode" class="form-control" (change)="updatedProjectCode">
+            <option value="" disabled selected>Select a Project Code</option>
+            <option *ngFor="let code of projectCodes" [value]="code.projectCode" type="number">{{ code.projectId
+              }}-{{code.projectDescription}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group m-2">
+        <label for="buildingTypeCode">BuildingTypeCode:</label>
+        <div class="input-group" aria-placeholder="Select buildingTypeCode">
+          <select id="buildingTypeCode" name="buildingTypeCode" type="number" aria-placeholder="Select buildingTypeCode"
+            formControlName="buildingTypeCode" class="form-control" (change)="updatedProjectCode">
+            <option value="" disabled selected>Select a buildingTypeCode</option>
+            <option *ngFor="let code of buildingTypeCodes" [value]="code.buildingTypeCode" type="number">{{ code.buildingTypeId
+              }}-{{code.buildingTypeDescr}}</option>
+          </select>
         </div>
       </div>
       <div class="form-group m-2">
         <label for="buildingId">Building ID:</label>
         <div class="input-group">
-          <input formControlName="buildingId" type="text" class="form-control">
+          <input formControlName="buildingId" type="text" required maxlength="8" class="form-control">
         </div>
       </div>
       <div class="form-group m-2">
         <label for="buildingDescription">Description:</label>
         <div class="input-group">
-          <input formControlName="buildingDescription" type="text" class="form-control">
+          <input formControlName="buildingDescription" type="text" required class="form-control">
         </div>
       </div>
       <div class="form-group m-2">
         <label for="oldNumber">oldNumber:</label>
         <div class="input-group">
-          <input formControlName="oldNumber" type="number" class="form-control">
+          <input formControlName="oldNumber" type="text" class="form-control">
         </div>
       </div>
       <div class="form-group m-2">
@@ -222,12 +264,17 @@
         </div>
       </div>
       <div class="form-group m-2">
+        <label for="numberOfFloors">NumberOfFloors</label>
+        <div class="input-group">
+          <input formControlName="numberOfFloors" type="text"  pattern="^[1-9]+[0-9]*$" class="form-control">
+        </div>
+      </div>
+      <div class="form-group m-2">
         <label for="profit">Profit:</label>
         <div class="input-group">
           <input formControlName="profit" type="text" class="form-control">
         </div>
       </div>
-
 
       <div class=" text-center m-3"> <button data-dismiss="modal" class="btn btn-info" (click)="onSave()">Save
           Changes</button> </div>
